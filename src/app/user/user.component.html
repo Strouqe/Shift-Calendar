@@ -1,0 +1,92 @@
+<form
+  class="form"
+  [formGroup]="userForm"
+  *ngIf="!showInfo"
+  (ngSubmit)="onSubmit()"
+>
+  <mat-card>
+    <div class="form__fields">
+      <div>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input formControlName="userName" matInput />
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+
+            <select matNativeControl formControlName="gender">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Choose a date</mat-label>
+            <input
+              matInput
+              formControlName="startDate"
+              [matDatepicker]="picker"
+              (click)="picker.open()"
+            />
+            <mat-datepicker
+              #picker
+              startView="month"
+              [startAt]="startDate"
+            ></mat-datepicker>
+          </mat-form-field>
+        </p>
+      </div>
+      <div>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Days in a shift</mat-label>
+            <input formControlName="shiftDays" matInput />
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Days of rest</mat-label>
+            <input formControlName="restDays" matInput />
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Number of hours/day </mat-label>
+            <input formControlName="workingHours" matInput />
+          </mat-form-field>
+        </p>
+      </div>
+    </div>
+    <button type="submit" mat-raised-button color="primary" [disabled]="!userForm.valid">Calculate</button>
+  </mat-card>
+  <!-- <button (click)="toggleCalendar()">Toggle calendar</button> -->
+</form>
+<div class="user-info__container">
+  <mat-card class="user-info" *ngIf="showInfo">
+    <mat-card-header> <h1>User info</h1></mat-card-header>
+
+    <mat-card-content class="user-info__totals">
+      <mat-list class="user-info__totals__items">
+        <mat-list-item> Name: {{ user.name }} </mat-list-item>
+        <mat-list-item> Gender: {{ user.gender }} </mat-list-item>
+        <mat-list-item> Total work time: {{ totalWorkedHours }} </mat-list-item>
+        <mat-list-item>
+          Total off days: {{ totalOffDays }}
+        </mat-list-item>
+        <mat-list-item>
+          Total free time: {{ totalRest }}
+        </mat-list-item>
+      </mat-list>
+      <div>
+        <app-calendar class="user-info__calendar"></app-calendar>
+      </div>
+    </mat-card-content>
+    <button class="button" type="button" mat-raised-button color="primary" (click)="onReset()">
+      ReCalculate
+    </button>
+  </mat-card>
+</div>
