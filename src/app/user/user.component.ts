@@ -32,7 +32,6 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.geoService.getUserCountry();
     this.subscription = this.userService.userChanged.subscribe((user: User) => {
       this.user = user;
     });
@@ -60,6 +59,7 @@ export class UserComponent implements OnInit {
   }
 
   onSubmit() {
+    this.geoService.getUserCountry();
     this.userService.clearUser();
     this.userService.createUser(
       this.userForm.value.userName,
