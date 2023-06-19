@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { User } from './user.model';
-import { ShiftService } from '../calendar/shift.service';
-import { Shift } from '../calendar/shift.model';
+import { ShiftService } from '../shifts/shift.service';
+import { Shift } from '../shifts/shift.model';
 import { Subject, Subscription } from 'rxjs';
 import { be } from 'date-fns/locale';
 import { MemeService } from '../shared/meme.service';

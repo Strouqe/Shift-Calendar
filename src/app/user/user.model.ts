@@ -1,4 +1,4 @@
-import { Shift } from '../calendar/shift.model';
+import { Shift } from '../shifts/shift.model';
 
 export class User {
   public name: string;
