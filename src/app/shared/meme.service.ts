@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { MemeResponse } from './memeResponse.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class MemeService {
   constructor(private http: HttpClient) {}
 
   fetchMems() {
-    return this.http.get(this.url).subscribe((res: any) => {
+    return this.http.get<MemeResponse>(this.url).subscribe((res) => {
       this.meme = res.preview[0];
       this.memeChanged.next(this.meme);
       console.log('meme link ============>', this.meme);

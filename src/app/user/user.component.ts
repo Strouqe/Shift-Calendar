@@ -5,6 +5,7 @@ import { User } from './user.model';
 import { UserService } from './user.service';
 import { formatDuration, intervalToDuration } from 'date-fns';
 import { MemeService } from '../shared/meme.service';
+import { GeoService } from '../shared/geo.service';
 
 @Component({
   selector: 'app-user',
@@ -25,12 +26,12 @@ export class UserComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private memeService: MemeService
+    private memeService: MemeService,
+    private geoService: GeoService,
   ) {}
 
   ngOnInit(): void {
     this.initForm();
-
     this.subscription = this.userService.userChanged.subscribe((user: User) => {
       this.user = user;
     });
@@ -58,6 +59,7 @@ export class UserComponent implements OnInit {
   }
 
   onSubmit() {
+    this.geoService.getUserCountry();
     this.userService.clearUser();
     this.userService.createUser(
       this.userForm.value.userName,
