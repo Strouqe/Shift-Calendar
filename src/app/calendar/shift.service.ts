@@ -10,10 +10,7 @@ import { Shift } from './shift.model';
 })
 export class ShiftService {
   shiftsChanged = new Subject<Shift[]>();
-  private shifts: Shift[] = [
-    // new Shift(new Date('2023-06-15'), new Date('2023-06-17'), 3, 3, 8),
-    // new Shift(new Date('2023-06-01'), new Date('2023-06-05'), 4, 2, 8),
-  ];
+  private shifts: Shift[] = [];
   constructor() {}
 
   setShifts(shifts: Shift[]) {
@@ -71,8 +68,8 @@ export class ShiftService {
       workingHours
     );
 
-    console.log('shift.service.startDate', startDate);
-    console.log('shift.service.shift', shift);
+    // console.log('shift.service.startDate', startDate);
+    // console.log('shift.service.shift', shift);
     let newStartDate = this.addDays(endDate, restDays)
       .toISOString()
       .split('T')[0];

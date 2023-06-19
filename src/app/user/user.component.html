@@ -15,6 +15,12 @@
         </p>
         <p>
           <mat-form-field appearance="outline">
+            <mat-label>Image URL</mat-label>
+            <input formControlName="imageUrl" matInput />
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
             <mat-label>Gender</mat-label>
 
             <select matNativeControl formControlName="gender">
@@ -61,7 +67,14 @@
         </p>
       </div>
     </div>
-    <button type="submit" mat-raised-button color="primary" [disabled]="!userForm.valid">Calculate</button>
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!userForm.valid"
+    >
+      Calculate
+    </button>
   </mat-card>
   <!-- <button (click)="toggleCalendar()">Toggle calendar</button> -->
 </form>
@@ -70,22 +83,27 @@
     <mat-card-header> <h1>User info</h1></mat-card-header>
 
     <mat-card-content class="user-info__totals">
+      <mat-card>
+        <img src="{{ user.imageUrl }}" alt="1" class="img" />
+      </mat-card>
       <mat-list class="user-info__totals__items">
         <mat-list-item> Name: {{ user.name }} </mat-list-item>
         <mat-list-item> Gender: {{ user.gender }} </mat-list-item>
         <mat-list-item> Total work time: {{ totalWorkedHours }} </mat-list-item>
-        <mat-list-item>
-          Total off days: {{ totalOffDays }}
-        </mat-list-item>
-        <mat-list-item>
-          Total free time: {{ totalRest }}
-        </mat-list-item>
+        <mat-list-item> Total off days: {{ totalOffDays }} </mat-list-item>
+        <mat-list-item> Total free time: {{ totalRest }} </mat-list-item>
       </mat-list>
       <div>
         <app-calendar class="user-info__calendar"></app-calendar>
       </div>
     </mat-card-content>
-    <button class="button" type="button" mat-raised-button color="primary" (click)="onReset()">
+    <button
+      class="button"
+      type="button"
+      mat-raised-button
+      color="primary"
+      (click)="onReset()"
+    >
       ReCalculate
     </button>
   </mat-card>

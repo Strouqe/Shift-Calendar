@@ -4,6 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { formatDuration, intervalToDuration } from 'date-fns';
+import { MemeService } from '../shared/meme.service';
 
 @Component({
   selector: 'app-user',
@@ -22,9 +23,10 @@ export class UserComponent implements OnInit {
   startDate = new Date();
   userForm: FormGroup;
 
-  constructor(private userService: UserService) {
-    console.log('changedUser: ', this.changedUser);
-  }
+  constructor(
+    private userService: UserService,
+    private memeService: MemeService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -46,6 +48,7 @@ export class UserComponent implements OnInit {
   private initForm() {
     this.userForm = new FormGroup({
       userName: new FormControl(null, Validators.required),
+      imageUrl: new FormControl(null),
       gender: new FormControl(null, Validators.required),
       startDate: new FormControl(this.startDate, Validators.required),
       shiftDays: new FormControl(null, Validators.required),
@@ -62,7 +65,10 @@ export class UserComponent implements OnInit {
       this.userForm.value.startDate,
       this.userForm.value.shiftDays,
       this.userForm.value.restDays,
-      this.userForm.value.workingHours
+      this.userForm.value.workingHours,
+      this.userForm.value.imageUrl
+        ? this.userForm.value.imageUrl
+        : this.memeService.getMems()
     );
     this.userService.saveUserInput(
       this.userForm.value.userName,
@@ -70,7 +76,8 @@ export class UserComponent implements OnInit {
       this.userForm.value.startDate,
       this.userForm.value.shiftDays,
       this.userForm.value.restDays,
-      this.userForm.value.workingHours
+      this.userForm.value.workingHours,
+      this.userForm.value.imageUrl
     );
     this.showInfo = true;
     this.formatValues();
@@ -87,9 +94,10 @@ export class UserComponent implements OnInit {
   formatValues() {
     if (this.user) {
       this.totalWorkedHours = this.splitTime(this.user.totalWorkHours);
-      this.totalOffDays = this.splitTime(+this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24)
+      this.totalOffDays = this.splitTime(
+        +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24
+      );
       this.totalRest = this.splitTime(this.user.totalFreeHours);
-
     }
   }
 
@@ -98,5 +106,7 @@ export class UserComponent implements OnInit {
     this.userService.clearUser();
     this.showInfo = false;
     this.userService.deleteUser();
+    this.memeService.fetchMems();
+    this.memeService.getMems();
   }
 }

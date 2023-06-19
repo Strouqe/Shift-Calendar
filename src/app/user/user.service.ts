@@ -4,6 +4,7 @@ import { ShiftService } from '../calendar/shift.service';
 import { Shift } from '../calendar/shift.model';
 import { Subject, Subscription } from 'rxjs';
 import { be } from 'date-fns/locale';
+import { MemeService } from '../shared/meme.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,9 @@ export class UserService implements OnInit, OnDestroy {
 
   subscription: Subscription;
 
-  constructor(private shiftsService: ShiftService) {}
+  constructor(private shiftsService: ShiftService, private memeService: MemeService) {
+    console.log('memasiki ====================================', this.memeService.fetchMems())
+  }
 
   ngOnInit(): void {
     this.subscription = this.shiftsService.shiftsChanged.subscribe(
@@ -29,7 +32,7 @@ export class UserService implements OnInit, OnDestroy {
   autoSetUser() {
     if (sessionStorage.getItem('userInput')) {
       const userInput = this.getUserInput();
-      this.createUser(userInput.name, userInput.gender, userInput.startDate, userInput.shiftDays, userInput.restDays, userInput.workingHours)
+      this.createUser(userInput.name, userInput.gender, userInput.startDate, userInput.shiftDays, userInput.restDays, userInput.workingHours, userInput.imgUrl)
     } else {
       return;
     }
@@ -40,8 +43,12 @@ export class UserService implements OnInit, OnDestroy {
     startDate: string,
     shiftDays: number,
     restDays: number,
-    workingHours: number) {
-    sessionStorage.setItem('userInput', JSON.stringify({name, gender, startDate, shiftDays, restDays, workingHours}));
+    workingHours: number,
+    imgUrl: string) {
+      if(!imgUrl) {
+        imgUrl = this.memeService.getMems();
+      }
+    sessionStorage.setItem('userInput', JSON.stringify({name, gender, startDate, shiftDays, restDays, workingHours, imgUrl}));
   }
 
   deleteUser() {
@@ -69,7 +76,8 @@ export class UserService implements OnInit, OnDestroy {
     startDate: string,
     shiftDays: number,
     restDays: number,
-    workingHours: number
+    workingHours: number,
+    imageUrl?: string
   ) {
     this.shiftsService.createShift(
       startDate,
@@ -83,7 +91,8 @@ export class UserService implements OnInit, OnDestroy {
         gender,
         this.totalWorkHours(workingHours, shiftDays),
         this.totalFreeTime(restDays, workingHours, shiftDays),
-        this.shiftsService.getShifts()
+        this.shiftsService.getShifts(),
+        imageUrl
       )
     );
 
