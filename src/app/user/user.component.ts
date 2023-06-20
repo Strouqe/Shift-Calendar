@@ -81,7 +81,7 @@ export class UserComponent implements OnInit {
 
 
     console.log('country =====>', country)
-    this.holidaysService.getHolidays(url);
+    this.holidaysService.fetchHolidays(url);
     this.userService.clearUser();
     this.userService.createUser(
       this.userForm.value.userName,

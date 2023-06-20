@@ -8,6 +8,8 @@ import { ShiftService } from '../shifts/shift.service';
 import { Shift } from '../shifts/shift.model';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.model';
+import { HolidaysService } from '../shared/holidays.service';
+import { formatISO } from 'date-fns';
 
 
 @Component({
@@ -24,7 +26,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   calendarForm: FormGroup;
   showCalendar = false;
 
-  constructor(private shiftsService: ShiftService, private userService: UserService) {}
+  constructor(private shiftsService: ShiftService, private userService: UserService, private holidayService: HolidaysService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -58,6 +60,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const year = cellDate.getFullYear();
 
     if (view === 'month') {
+      for(let i = 0; i < this.holidayService.getHolidays().length; i++) {
+        if (
+          formatISO(cellDate, { representation: 'date' }) == this.holidayService.getHolidays()[i].date.iso
+        ) {
+          return 'holiday';
+        }
+      }
+
       for (let i = 0; i < this.shifts.length; i++) {
         if (
           year === this.shifts[i].startDate.getFullYear() &&
