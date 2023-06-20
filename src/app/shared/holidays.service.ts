@@ -21,7 +21,7 @@ export class HolidaysService {
 
   constructor(private http: HttpClient, private geaoService: GeoService) {}
 
-  fetchYear = 2023;
+  fetchYear = new Date().getFullYear();
 
   setHolidays(holidays: Holiday[]) {
     this.holidays = [...this.holidays, ...holidays]
