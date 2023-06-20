@@ -6,19 +6,31 @@ import { Injectable } from '@angular/core';
 })
 export class GeoService {
   constructor() { }
+  // userCountry: string;
 
-  getUserCountry(): void {
+  // setCountry(country: string) {
+  //   this.userCountry = country;
+  // }
+
+  // getCountry() {
+  //   return this.userCountry;
+  // }
+
+
+  getUserCountry() {
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         this.successCallback,
         this.errorCallback
       );
+
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
   }
 
-  successCallback(position: GeolocationPosition): void {
+  successCallback(position: GeolocationPosition) {
     const latitude: number = position.coords.latitude;
     const longitude: number = position.coords.longitude;
 
@@ -32,7 +44,9 @@ export class GeoService {
             (component: google.maps.GeocoderAddressComponent) => component.types.includes("country")
           );
           if (country) {
-            console.log("User's country:", country.long_name);
+            console.log("User's country:", country.short_name
+            );
+            sessionStorage.setItem('userCountry', JSON.stringify({country}))
           }
         }
       } else {

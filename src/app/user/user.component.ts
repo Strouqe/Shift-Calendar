@@ -6,6 +6,7 @@ import { UserService } from './user.service';
 import { formatDuration, intervalToDuration } from 'date-fns';
 import { MemeService } from '../shared/meme.service';
 import { GeoService } from '../shared/geo.service';
+import { HolidaysService } from '../shared/holidays.service';
 
 @Component({
   selector: 'app-user',
@@ -24,13 +25,17 @@ export class UserComponent implements OnInit {
   startDate = new Date();
   userForm: FormGroup;
 
+
+
   constructor(
     private userService: UserService,
     private memeService: MemeService,
     private geoService: GeoService,
+    private holidaysService: HolidaysService,
   ) {}
 
   ngOnInit(): void {
+    this.geoService.getUserCountry()
     this.initForm();
     this.subscription = this.userService.userChanged.subscribe((user: User) => {
       this.user = user;
@@ -44,6 +49,9 @@ export class UserComponent implements OnInit {
       this.formatValues();
     }
     console.log('user: ', this.user);
+    console.log('geo =====>', this.geoService.getUserCountry())
+
+
   }
 
   private initForm() {
@@ -58,8 +66,22 @@ export class UserComponent implements OnInit {
     });
   }
 
+
+
+
+
+
+
   onSubmit() {
-    this.geoService.getUserCountry();
+
+    let country = sessionStorage.getItem('userCountry') && JSON.parse(<string>sessionStorage.getItem('userCountry')).country.short_name;
+
+    let url =
+    'https://calendarific.com/api/v2/holidays?api_key=66ab7b1eafc10c308f535e183762ec1ddfab6d5c&country='+ country + '&year=2023';
+
+
+    console.log('country =====>', country)
+    this.holidaysService.getHolidays(url);
     this.userService.clearUser();
     this.userService.createUser(
       this.userForm.value.userName,
