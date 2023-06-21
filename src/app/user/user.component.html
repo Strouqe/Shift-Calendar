@@ -81,11 +81,12 @@
 <div class="user-info__container">
   <mat-card class="user-info" *ngIf="showInfo">
     <mat-card-header> <h1>User info</h1></mat-card-header>
-
+    <mat-card>
     <mat-card-content class="user-info__totals">
       <mat-card>
         <img src="{{ user.imageUrl }}" alt="1" class="img" />
       </mat-card>
+
       <mat-list class="user-info__totals__items">
         <mat-list-item> Name: {{ user.name }} </mat-list-item>
         <mat-list-item> Gender: {{ user.gender }} </mat-list-item>
@@ -97,6 +98,7 @@
         <app-calendar class="user-info__calendar"></app-calendar>
       </div>
     </mat-card-content>
+  </mat-card>
     <app-pie-chart *ngIf="showInfo"></app-pie-chart>
     <button
       class="button"
