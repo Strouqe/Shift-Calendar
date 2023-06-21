@@ -7,6 +7,7 @@ import { formatDuration, intervalToDuration } from 'date-fns';
 import { MemeService } from '../shared/meme.service';
 import { GeoService } from '../shared/geo.service';
 import { HolidaysService } from '../shared/holidays.service';
+import { ShiftService } from '../shifts/shift.service';
 
 @Component({
   selector: 'app-user',
@@ -32,6 +33,7 @@ export class UserComponent implements OnInit {
     private memeService: MemeService,
     private geoService: GeoService,
     private holidaysService: HolidaysService,
+    private shiftService: ShiftService
   ) {}
 
   ngOnInit(): void {
@@ -118,11 +120,11 @@ export class UserComponent implements OnInit {
 
   formatValues() {
     if (this.user) {
-      this.totalWorkedHours = this.splitTime(this.user.totalWorkHours);
+      this.totalWorkedHours = this.splitTime(this.user.totalWorkHours - this.user.shifts[0].workingHours * this.shiftService.sumHolidays());
       this.totalOffDays = this.splitTime(
-        +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24
+        +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24 + this.shiftService.sumHolidays()
       );
-      this.totalRest = this.splitTime(this.user.totalFreeHours);
+      this.totalRest = this.splitTime(this.user.totalFreeHours + (this.shiftService.sumHolidays() * 24) - ((24 - this.user.shifts[0].workingHours)*this.shiftService.sumHolidays()));
     }
   }
 

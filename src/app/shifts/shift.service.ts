@@ -61,7 +61,7 @@ export class ShiftService {
     let holidays = this.holidayService.getHolidays().filter((holiday) => {
       return (
         compareAsc(new Date(holiday.date.iso), new Date(startDate)) !== -1 &&
-        compareAsc(new Date(holiday.date.iso), endDate) !== 1
+        compareAsc(new Date(holiday.date.iso), endDate) === -1
         );
       });
 
@@ -92,5 +92,13 @@ export class ShiftService {
       this.setShifts(this.shifts);
       this.createShift(newStartDate, shiftDays, restDays, workingHours);
     }
+  }
+
+  sumHolidays(): number {
+    let sum = 0;
+    this.shifts.forEach((shift) => {
+      sum += shift.holidays.length;
+    });
+    return sum;
   }
 }
