@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { GeoService } from './geo.service';
+import { HttpClient } from '@angular/common/http';
 import { Holiday } from './holiday.model';
 import { set } from 'date-fns';
 
@@ -19,7 +18,7 @@ export class HolidaysService {
   private holidays: Holiday[] = [...this.fetchYearHollidays, ...this.nextYearHoliday];
 
 
-  constructor(private http: HttpClient, private geaoService: GeoService) {}
+  constructor(private http: HttpClient,) {}
 
   fetchYear = new Date().getFullYear();
 

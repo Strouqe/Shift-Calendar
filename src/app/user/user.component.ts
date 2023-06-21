@@ -52,6 +52,15 @@ export class UserComponent implements OnInit {
     console.log('geo =====>', this.geoService.getUserCountry())
 
 
+    let country = sessionStorage.getItem('userCountry') && JSON.parse(<string>sessionStorage.getItem('userCountry')).country.short_name;
+
+    let url =
+    'https://calendarific.com/api/v2/holidays?api_key=66ab7b1eafc10c308f535e183762ec1ddfab6d5c&country='+ country ;
+
+
+    console.log('country =====>', country)
+    this.holidaysService.fetchAllHolidays(url);
+
   }
 
   private initForm() {
@@ -74,14 +83,6 @@ export class UserComponent implements OnInit {
 
   onSubmit() {
 
-    let country = sessionStorage.getItem('userCountry') && JSON.parse(<string>sessionStorage.getItem('userCountry')).country.short_name;
-
-    let url =
-    'https://calendarific.com/api/v2/holidays?api_key=66ab7b1eafc10c308f535e183762ec1ddfab6d5c&country='+ country ;
-
-
-    console.log('country =====>', country)
-    this.holidaysService.fetchAllHolidays(url);
     this.userService.clearUser();
     this.userService.createUser(
       this.userForm.value.userName,
