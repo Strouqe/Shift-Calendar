@@ -4,6 +4,7 @@ import compareAsc from 'date-fns/compareAsc';
 import add from 'date-fns/add';
 
 import { Shift } from './shift.model';
+import { HolidaysService } from '../shared/holidays.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { Shift } from './shift.model';
 export class ShiftService {
   shiftsChanged = new Subject<Shift[]>();
   private shifts: Shift[] = [];
-  constructor() {}
+  constructor(private holidayService: HolidaysService) {}
 
   setShifts(shifts: Shift[]) {
     this.shifts = shifts;
@@ -55,30 +56,27 @@ export class ShiftService {
     restDays: number,
     workingHours: number
   ) {
-    // if(new Date(startDate).getMonth() > 5){
-    //   return;
-    // }
     let endDate = this.addDays(new Date(startDate), shiftDays);
+
+    let holidays = this.holidayService.getHolidays().filter((holiday) => {
+      return (
+        compareAsc(new Date(holiday.date.iso), new Date(startDate)) !== -1 &&
+        compareAsc(new Date(holiday.date.iso), endDate) === -1
+        );
+      });
 
     let shift = new Shift(
       new Date(startDate),
       endDate,
       shiftDays,
       restDays,
-      workingHours
+      workingHours,
+      holidays
     );
 
-    // console.log('shift.service.startDate', startDate);
-    // console.log('shift.service.shift', shift);
     let newStartDate = this.addDays(endDate, restDays)
       .toISOString()
       .split('T')[0];
-
-    // console.log(
-    //   '*========================21dwqdQD',
-    //   compareAsc(add(this.shifts[0].startDate, { years: 1 }), endDate),
-    //   endDate
-    // );
 
     if (this.shifts.length === 0) {
       this.shifts.push(shift);
@@ -94,5 +92,13 @@ export class ShiftService {
       this.setShifts(this.shifts);
       this.createShift(newStartDate, shiftDays, restDays, workingHours);
     }
+  }
+
+  sumHolidays(): number {
+    let sum = 0;
+    this.shifts.forEach((shift) => {
+      sum += shift.holidays.length;
+    });
+    return sum;
   }
 }

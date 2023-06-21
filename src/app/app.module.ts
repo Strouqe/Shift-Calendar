@@ -13,17 +13,22 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
+import { NgApexchartsModule } from "ng-apexcharts";
+
 
 import { CommonModule } from '@angular/common';
 
 import { UserComponent } from './user/user.component';
 import { ShiftsComponent } from './shifts/shifts.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     CalendarComponent,
     UserComponent,
-    ShiftsComponent
+    ShiftsComponent,
+    PieChartComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +42,8 @@ import { ShiftsComponent } from './shifts/shifts.component';
     MatCardModule,
     MatListModule,
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgApexchartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,6 +6,8 @@ import { UserService } from './user.service';
 import { formatDuration, intervalToDuration } from 'date-fns';
 import { MemeService } from '../shared/meme.service';
 import { GeoService } from '../shared/geo.service';
+import { HolidaysService } from '../shared/holidays.service';
+import { ShiftService } from '../shifts/shift.service';
 
 @Component({
   selector: 'app-user',
@@ -28,9 +30,12 @@ export class UserComponent implements OnInit {
     private userService: UserService,
     private memeService: MemeService,
     private geoService: GeoService,
+    private holidaysService: HolidaysService,
+    private shiftService: ShiftService
   ) {}
 
   ngOnInit(): void {
+    this.geoService.getUserCountry();
     this.initForm();
     this.subscription = this.userService.userChanged.subscribe((user: User) => {
       this.user = user;
@@ -44,6 +49,19 @@ export class UserComponent implements OnInit {
       this.formatValues();
     }
     console.log('user: ', this.user);
+    console.log('geo =====>', this.geoService.getUserCountry());
+
+    let country =
+      sessionStorage.getItem('userCountry') &&
+      JSON.parse(<string>sessionStorage.getItem('userCountry')).country
+        .short_name;
+
+    let url =
+      'https://calendarific.com/api/v2/holidays?api_key=66ab7b1eafc10c308f535e183762ec1ddfab6d5c&country=' +
+      country;
+
+    console.log('country =====>', country);
+    this.holidaysService.fetchAllHolidays(url);
   }
 
   private initForm() {
@@ -59,7 +77,6 @@ export class UserComponent implements OnInit {
   }
 
   onSubmit() {
-    this.geoService.getUserCountry();
     this.userService.clearUser();
     this.userService.createUser(
       this.userForm.value.userName,
@@ -95,11 +112,20 @@ export class UserComponent implements OnInit {
 
   formatValues() {
     if (this.user) {
-      this.totalWorkedHours = this.splitTime(this.user.totalWorkHours);
-      this.totalOffDays = this.splitTime(
-        +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24
+      this.totalWorkedHours = this.splitTime(
+        this.user.totalWorkHours -
+          this.user.shifts[0].workingHours * this.shiftService.sumHolidays()
       );
-      this.totalRest = this.splitTime(this.user.totalFreeHours);
+      this.totalOffDays = this.splitTime(
+        +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24 +
+          this.shiftService.sumHolidays()
+      );
+      this.totalRest = this.splitTime(
+        this.user.totalFreeHours +
+          this.shiftService.sumHolidays() * 24 -
+          (24 - this.user.shifts[0].workingHours) *
+            this.shiftService.sumHolidays()
+      );
     }
   }
 
