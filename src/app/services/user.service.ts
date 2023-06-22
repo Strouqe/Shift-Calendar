@@ -1,10 +1,10 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { User } from './user.model';
-import { ShiftService } from '../shifts/shift.service';
-import { Shift } from '../shifts/shift.model';
+import { User } from '../models/user.model';
+import { ShiftService } from './shift.service';
+import { Shift } from '../models/shift.model';
 import { Subject, Subscription } from 'rxjs';
 import { be } from 'date-fns/locale';
-import { MemeService } from '../shared/meme.service';
+import { MemeService } from './meme.service';
 
 @Injectable({
   providedIn: 'root',

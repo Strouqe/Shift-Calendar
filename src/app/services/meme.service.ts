@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { MemeResponse } from './memeResponse.model';
+import { MemeResponse } from '../models/memeResponse.model';
 
 @Injectable({
   providedIn: 'root',

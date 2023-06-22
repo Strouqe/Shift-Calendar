@@ -5,7 +5,7 @@ import { HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
@@ -18,9 +18,9 @@ import { NgApexchartsModule } from "ng-apexcharts";
 
 import { CommonModule } from '@angular/common';
 
-import { UserComponent } from './user/user.component';
-import { ShiftsComponent } from './shifts/shifts.component';
-import { PieChartComponent } from './pie-chart/pie-chart.component';
+import { UserComponent } from './components/user/user.component';
+import { ShiftsComponent } from './components/shifts/shifts.component';
+import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 
 @NgModule({
   declarations: [

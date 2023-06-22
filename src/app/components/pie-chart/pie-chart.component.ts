@@ -6,7 +6,7 @@ import {
   ApexResponsive,
   ApexChart
 } from "ng-apexcharts";
-import { UserService } from "../user/user.service";
+import { UserService } from "../../services/user.service";
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;

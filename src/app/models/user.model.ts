@@ -1,4 +1,4 @@
-import { Shift } from '../shifts/shift.model';
+import { Shift } from './shift.model';
 
 export class User {
   public name: string;

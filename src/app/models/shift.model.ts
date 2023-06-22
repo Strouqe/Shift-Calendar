@@ -1,4 +1,4 @@
-import { Holiday } from "../shared/holiday.model";
+import { Holiday } from "./holiday.model";
 
 export class Shift {
   constructor(

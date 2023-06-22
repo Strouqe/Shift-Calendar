@@ -1,32 +1,19 @@
 import { Injectable } from '@angular/core';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GeoService {
-  constructor() { }
-  // userCountry: string;
-
-  // setCountry(country: string) {
-  //   this.userCountry = country;
-  // }
-
-  // getCountry() {
-  //   return this.userCountry;
-  // }
-
+  constructor() {}
 
   getUserCountry() {
-
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         this.successCallback,
         this.errorCallback
       );
-
     } else {
-      console.log("Geolocation is not supported by this browser.");
+      console.log('Geolocation is not supported by this browser.');
     }
   }
 
@@ -38,24 +25,25 @@ export class GeoService {
     const latlng: google.maps.LatLngLiteral = { lat: latitude, lng: longitude };
 
     geocoder.geocode({ location: latlng }, (results, status) => {
-      if (status === "OK") {
+      if (status === 'OK') {
         if (results![0]) {
-          const country: google.maps.GeocoderAddressComponent | undefined = results![0].address_components.find(
-            (component: google.maps.GeocoderAddressComponent) => component.types.includes("country")
-          );
-          if (country) {
-            console.log("User's country:", country.short_name
+          const country: google.maps.GeocoderAddressComponent | undefined =
+            results![0].address_components.find(
+              (component: google.maps.GeocoderAddressComponent) =>
+                component.types.includes('country')
             );
-            sessionStorage.setItem('userCountry', JSON.stringify({country}))
+          if (country) {
+            console.log("User's country:", country.short_name);
+            sessionStorage.setItem('userCountry', JSON.stringify({ country }));
           }
         }
       } else {
-        console.log("Geocoder failed due to:", status);
+        console.log('Geocoder failed due to:', status);
       }
     });
   }
 
   errorCallback(error: GeolocationPositionError): void {
-    console.log("Geolocation error occurred:", error.message);
+    console.log('Geolocation error occurred:', error.message);
   }
 }

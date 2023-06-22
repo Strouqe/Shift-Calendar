@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Holiday } from './holiday.model';
+import { Holiday } from '../models/holiday.model';
 import { set } from 'date-fns';
 
 interface HolidayResponse  {

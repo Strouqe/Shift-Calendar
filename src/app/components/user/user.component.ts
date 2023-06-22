@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
-import { User } from './user.model';
-import { UserService } from './user.service';
+import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
 import { formatDuration, intervalToDuration } from 'date-fns';
-import { MemeService } from '../shared/meme.service';
-import { GeoService } from '../shared/geo.service';
-import { HolidaysService } from '../shared/holidays.service';
-import { ShiftService } from '../shifts/shift.service';
+import { MemeService } from '../../services/meme.service';
+import { GeoService } from '../../services/geo.service';
+import { HolidaysService } from '../../services/holidays.service';
+import { ShiftService } from '../../services/shift.service';
 
 @Component({
   selector: 'app-user',

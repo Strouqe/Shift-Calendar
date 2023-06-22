@@ -4,11 +4,11 @@ import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 import { Subscription } from 'rxjs';
 import compareAsc from 'date-fns/compareAsc'
 
-import { ShiftService } from '../shifts/shift.service';
-import { Shift } from '../shifts/shift.model';
-import { UserService } from '../user/user.service';
-import { User } from '../user/user.model';
-import { HolidaysService } from '../shared/holidays.service';
+import { ShiftService } from '../../services/shift.service';
+import { Shift } from '../../models/shift.model';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user.model';
+import { HolidaysService } from '../../services/holidays.service';
 import { formatISO } from 'date-fns';
 
 

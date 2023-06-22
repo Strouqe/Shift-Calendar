@@ -3,8 +3,8 @@ import { Subject } from 'rxjs';
 import compareAsc from 'date-fns/compareAsc';
 import add from 'date-fns/add';
 
-import { Shift } from './shift.model';
-import { HolidaysService } from '../shared/holidays.service';
+import { Shift } from '../models/shift.model';
+import { HolidaysService } from './holidays.service';
 
 @Injectable({
   providedIn: 'root',
