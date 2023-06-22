@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Holiday } from '../models/holiday.model';
 import { set } from 'date-fns';
 
-interface HolidayResponse  {
+interface HolidayResponse {
   response: {
     holidays: Holiday[];
   };
@@ -15,43 +15,51 @@ interface HolidayResponse  {
 export class HolidaysService {
   private fetchYearHollidays: Holiday[] = [];
   private nextYearHoliday: Holiday[] = [];
-  private holidays: Holiday[] = [...this.fetchYearHollidays, ...this.nextYearHoliday];
+  private holidays: Holiday[] = [
+    ...this.fetchYearHollidays,
+    ...this.nextYearHoliday,
+  ];
 
-
-  constructor(private http: HttpClient,) {}
+  constructor(
+    private http: HttpClient,
+  ) {}
 
   fetchYear = new Date().getFullYear();
 
   setHolidays(holidays: Holiday[]) {
-    this.holidays = [...this.holidays, ...holidays]
+    this.holidays = [...this.holidays, ...holidays];
   }
 
-  fetchAllHolidays(url:string) {
+  fetchAllHolidays(url: string) {
     this.fetchHolidays(url);
     this.fetchNextYearHolidays(url);
     setTimeout(() => {
       this.setHolidays(this.fetchYearHollidays);
       this.setHolidays(this.nextYearHoliday);
-    }
-    , 1000);
+    }, 1000);
   }
 
   fetchNextYearHolidays(url: string) {
-    return this.http.get<HolidayResponse>(url + '&year=' + (this.fetchYear + 1)).subscribe((res ) => {
-      console.log('res ============>', res)
-      this.nextYearHoliday = res.response.holidays;
-      console.log('nextYearsHolidays ============>', this.nextYearHoliday)
-    });
-
+    return this.http
+      .get<HolidayResponse>(url + '&year=' + (this.fetchYear + 1))
+      .subscribe((res) => {
+        console.log('res ============>', res);
+        this.nextYearHoliday = res.response.holidays;
+        console.log('nextYearsHolidays ============>', this.nextYearHoliday);
+      });
   }
 
   fetchHolidays(url: string) {
-    return this.http.get<HolidayResponse>(url + '&year=' + this.fetchYear).subscribe((res ) => {
-      console.log('res ============>', res)
-      this.fetchYearHollidays = res.response.holidays;
-      console.log('fetchYearHollidays ============>', this.fetchYearHollidays)
-    });
-
+    return this.http
+      .get<HolidayResponse>(url + '&year=' + this.fetchYear)
+      .subscribe((res) => {
+        console.log('res ============>', res);
+        this.fetchYearHollidays = res.response.holidays;
+        console.log(
+          'fetchYearHollidays ============>',
+          this.fetchYearHollidays
+        );
+      });
   }
 
   getHolidays() {
