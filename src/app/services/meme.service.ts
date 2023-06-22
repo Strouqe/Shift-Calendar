@@ -11,7 +11,9 @@ export class MemeService {
   memeChanged = new Subject<string>();
   private meme: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+  ) {}
 
   fetchMems() {
     return this.http.get<MemeResponse>(this.url).subscribe((res) => {
