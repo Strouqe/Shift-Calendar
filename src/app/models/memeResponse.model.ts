@@ -8,6 +8,6 @@ export class MemeResponse {
     public subreddit: string,
     public title: string,
     public ups: number,
-    public url: string,
-  ){}
+    public url: string
+  ) {}
 }

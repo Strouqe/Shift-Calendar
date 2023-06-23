@@ -1,12 +1,12 @@
-import { Component, ViewChild } from "@angular/core";
-import { ChartComponent } from "ng-apexcharts";
+import { Component, ViewChild } from '@angular/core';
 import {
+  ApexChart,
   ApexNonAxisChartSeries,
   ApexResponsive,
-  ApexChart
-} from "ng-apexcharts";
+  ChartComponent,
+} from 'ng-apexcharts';
 
-import { UserService } from "../../services/user.service";
+import { UserService } from '../../services/user.service';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -18,21 +18,23 @@ export type ChartOptions = {
 @Component({
   selector: 'app-pie-chart',
   templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.scss']
+  styleUrls: ['./pie-chart.component.scss'],
 })
 export class PieChartComponent {
-  @ViewChild("chart") chart: ChartComponent;
+  @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
   constructor(private userService: UserService) {
     this.chartOptions = {
-      series: [this.userService.getUser().totalWorkHours, this.userService.getUser().totalFreeHours],
+      series: [
+        this.userService.getUser().totalWorkHours,
+        this.userService.getUser().totalFreeHours,
+      ],
       chart: {
         width: 390,
-        type: "pie",
-
+        type: 'pie',
       },
-      labels: ["Total work hours", "Total free hours"],
+      labels: ['Total work hours', 'Total free hours'],
       // responsive: [
       //   {
       //     breakpoint: 360,

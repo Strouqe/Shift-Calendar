@@ -1,10 +1,9 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { User } from '../models/user.model';
-import { ShiftService } from './shift.service';
-import { Shift } from '../models/shift.model';
 import { Subject, Subscription } from 'rxjs';
-import { be } from 'date-fns/locale';
+import { Shift } from '../models/shift.model';
+import { User } from '../models/user.model';
 import { MemeService } from './meme.service';
+import { ShiftService } from './shift.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +20,7 @@ export class UserService implements OnInit, OnDestroy {
     private memeService: MemeService,
     private shiftService: ShiftService
   ) {
-      this.memeService.fetchMems()
+    this.memeService.fetchMems();
   }
 
   ngOnInit(): void {

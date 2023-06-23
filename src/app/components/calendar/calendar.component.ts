@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
-import { Subscription } from 'rxjs';
 import compareAsc from 'date-fns/compareAsc';
+import { Subscription } from 'rxjs';
 
-import { ShiftService } from '../../services/shift.service';
+import { formatISO } from 'date-fns';
 import { Shift } from '../../models/shift.model';
-import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { HolidaysService } from '../../services/holidays.service';
-import { formatISO } from 'date-fns';
+import { ShiftService } from '../../services/shift.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-calendar',

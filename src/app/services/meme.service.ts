@@ -1,5 +1,5 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { MemeResponse } from '../models/memeResponse.model';
 
@@ -11,9 +11,7 @@ export class MemeService {
   memeChanged = new Subject<string>();
   private meme: string;
 
-  constructor(
-    private http: HttpClient,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   fetchMems() {
     return this.http.get<MemeResponse>(this.url).subscribe((res) => {

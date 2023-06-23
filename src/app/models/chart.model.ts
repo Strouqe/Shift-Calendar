@@ -1,13 +1,13 @@
 export enum ChartHorizontalAlign {
   left = 'left',
   center = 'center',
-  right = 'right'
+  right = 'right',
 }
 
 export enum ChartVerticalAlign {
   top = 'top',
   middle = 'middle',
-  bottom = 'bottom'
+  bottom = 'bottom',
 }
 
 export enum ChartTypes {
@@ -20,24 +20,24 @@ export enum ChartTypes {
   radialBar = 'radialBar',
   scatter = 'scatter',
   bubble = 'bubble',
-  heatmap = 'heatmap'
+  heatmap = 'heatmap',
 }
 
 export enum ChartShape {
   circle = 'circle',
-  square = 'square'
+  square = 'square',
 }
 
 export enum ChartPosition {
   top = 'top',
   right = 'right',
   bottom = 'bottom',
-  left = 'left'
+  left = 'left',
 }
 
 export enum ChartCurve {
   smooth = 'smooth',
-  straight = 'straight'
+  straight = 'straight',
 }
 
 export interface ChartLegend {
@@ -52,31 +52,31 @@ export interface ChartLegend {
   formatter?: any;
   textAnchor?: string;
   labels?: {
-      foreColor?: string;
-      useSeriesColors?: boolean;
+    foreColor?: string;
+    useSeriesColors?: boolean;
   };
   markers?: {
-      size?: number;
-      strokeColor?: string;
-      strokeWidth?: number;
-      offsetX?: number;
-      offsetY?: number;
-      radius?: number;
-      shape?: ChartShape;
+    size?: number;
+    strokeColor?: string;
+    strokeWidth?: number;
+    offsetX?: number;
+    offsetY?: number;
+    radius?: number;
+    shape?: ChartShape;
   };
   itemMargin?: {
-      horizontal?: number;
-      vertical?: number
+    horizontal?: number;
+    vertical?: number;
   };
   containerMargin?: {
-      left?: number;
-      top?: number;
+    left?: number;
+    top?: number;
   };
   onItemClick?: {
-      toggleDataSeries?: boolean;
+    toggleDataSeries?: boolean;
   };
   onItemHover?: {
-      highlightDataSeries?: boolean;
+    highlightDataSeries?: boolean;
   };
 }
 
@@ -84,15 +84,15 @@ export interface ChartConfig {
   height?: number;
   type?: ChartTypes;
   shadow?: {
-      enabled?: boolean;
-      color?: string;
-      top?: number;
-      left?: number;
-      blur?: number;
-      opacity?: number
+    enabled?: boolean;
+    color?: string;
+    top?: number;
+    left?: number;
+    blur?: number;
+    opacity?: number;
   };
   zoom?: {
-      enabled?: boolean
+    enabled?: boolean;
   };
 }
 
@@ -110,16 +110,16 @@ export interface Chart {
   chart?: ChartConfig;
   colors?: string[];
   stroke?: {
-      curve?: ChartCurve;
+    curve?: ChartCurve;
   };
   series?: ChartSerie[];
   title?: {
-      text?: string;
-      align?: ChartHorizontalAlign;
+    text?: string;
+    align?: ChartHorizontalAlign;
   };
   grid?: {
-      borderColor?: string;
-      row?: ChartRow;
+    borderColor?: string;
+    row?: ChartRow;
   };
   markers?: {
     size?: number;
@@ -133,21 +133,21 @@ export interface Chart {
     offsetX?: number;
     offsetY?: number;
     hover?: {
-      size?: number
-    }
+      size?: number;
+    };
   };
   xaxis?: {
-      categories?: string[];
-      title?: {
-          text?: string;
-      }
+    categories?: string[];
+    title?: {
+      text?: string;
+    };
   };
   yaxis?: {
-      title?: {
-          text?: string;
-      };
-      min?: number;
-      max?: number;
+    title?: {
+      text?: string;
+    };
+    min?: number;
+    max?: number;
   };
   legend?: ChartLegend;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import compareAsc from 'date-fns/compareAsc';
 import add from 'date-fns/add';
+import compareAsc from 'date-fns/compareAsc';
+import { Subject } from 'rxjs';
 
 import { Shift } from '../models/shift.model';
 import { HolidaysService } from './holidays.service';
@@ -12,9 +12,7 @@ import { HolidaysService } from './holidays.service';
 export class ShiftService {
   shiftsChanged = new Subject<Shift[]>();
   private shifts: Shift[] = [];
-  constructor(
-    private holidayService: HolidaysService,
-  ) {}
+  constructor(private holidayService: HolidaysService) {}
 
   setShifts(shifts: Shift[]) {
     this.shifts = shifts;

@@ -1,4 +1,4 @@
-import { Holiday } from "./holiday.model";
+import { Holiday } from './holiday.model';
 
 export class Shift {
   constructor(
@@ -7,6 +7,6 @@ export class Shift {
     public shiftDays: number,
     public restDays: number,
     public workingHours: number,
-    public holidays: Holiday[],
-  ){}
+    public holidays: Holiday[]
+  ) {}
 }

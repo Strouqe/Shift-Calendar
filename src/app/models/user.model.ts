@@ -14,7 +14,7 @@ export class User {
     totalWorkHours: number,
     totalFreeHours: number,
     shifts: Shift[],
-    imageUrl?: string,
+    imageUrl?: string
   ) {
     this.name = name;
     this.gender = gender;
