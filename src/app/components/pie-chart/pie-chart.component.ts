@@ -29,23 +29,24 @@ export class PieChartComponent {
     this.chartOptions = {
       series: [this.userService.getUser().totalWorkHours, this.userService.getUser().totalFreeHours],
       chart: {
-        width: 380,
-        type: "pie"
+        width: 390,
+        type: "pie",
+
       },
       labels: ["Total work hours", "Total free hours"],
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: "bottom"
-            }
-          }
-        }
-      ]
+      // responsive: [
+      //   {
+      //     breakpoint: 360,
+      //     options: {
+      //       chart: {
+      //         width: 150
+      //       },
+      //       legend: {
+      //         position: "bottom"
+      //       }
+      //     }
+      //   }
+      // ]
     };
   }
 }

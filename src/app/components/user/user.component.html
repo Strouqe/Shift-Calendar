@@ -76,38 +76,44 @@
       Calculate
     </button>
   </mat-card>
-  <!-- <button (click)="toggleCalendar()">Toggle calendar</button> -->
 </form>
 <div class="user-info__container" *ngIf="showInfo">
-  <mat-card class="user-info" >
-    <mat-card-header> <h1>User info</h1></mat-card-header>
-    <mat-card>
-    <mat-card-content class="user-info__totals">
-      <mat-card>
-        <img src="{{ user.imageUrl }}" alt="1" class="img" />
-      </mat-card>
+  <mat-card class="user-info">
+    <mat-tab-group class="user-info__tabs">
+      <mat-tab label="User Info" class="user-info__tab">
+        <div class="user-info__tab">
+          <mat-card>
+            <img src="{{ user.imageUrl }}" alt="1" class="img" />
+          </mat-card>
+          <mat-list class="user-info__totals__items">
+            <mat-list-item> Name: {{ user.name }} </mat-list-item>
+            <mat-list-item> Gender: {{ user.gender }} </mat-list-item>
+            <mat-list-item>
+              Total work time: {{ totalWorkedHours }}
+            </mat-list-item>
+            <mat-list-item> Total off days: {{ totalOffDays }} </mat-list-item>
+            <mat-list-item> Total free time: {{ totalRest }} </mat-list-item>
+          </mat-list>
+        </div>
+      </mat-tab>
+      <mat-tab label="Calendar" class="user-info__tab">
+        <div class="user-info__totals__calendar">
+          <app-calendar></app-calendar></div
+      ></mat-tab>
+      <mat-tab label="Chart" class="user-info__tab--chart">
+        <app-pie-chart *ngIf="showInfo"></app-pie-chart>
+      </mat-tab>
+    </mat-tab-group>
 
-      <mat-list class="user-info__totals__items">
-        <mat-list-item> Name: {{ user.name }} </mat-list-item>
-        <mat-list-item> Gender: {{ user.gender }} </mat-list-item>
-        <mat-list-item> Total work time: {{ totalWorkedHours }} </mat-list-item>
-        <mat-list-item> Total off days: {{ totalOffDays }} </mat-list-item>
-        <mat-list-item> Total free time: {{ totalRest }} </mat-list-item>
-      </mat-list>
-      <div>
-        <app-calendar class="user-info__calendar"></app-calendar>
-      </div>
-    </mat-card-content>
-  </mat-card>
-    <app-pie-chart *ngIf="showInfo"></app-pie-chart>
-    <button
-      class="button"
-      type="button"
-      mat-raised-button
-      color="primary"
-      (click)="onReset()"
-    >
-      ReCalculate
-    </button>
+    <div class="button">
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        (click)="onReset()"
+      >
+        ReCalculate
+      </button>
+    </div>
   </mat-card>
 </div>
