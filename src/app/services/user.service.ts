@@ -1,24 +1,22 @@
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { Shift } from '../models/shift.model';
-import { User } from '../models/user.model';
+import { User, UserInput } from '../models/user.model';
 import { MemeService } from './meme.service';
 import { ShiftService } from './shift.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserService implements OnInit, OnDestroy {
+export class UserService implements OnInit {
   userChanged = new Subject<User>();
-  private user: User;
-  shifts: Shift[];
-
   subscription: Subscription;
+  shifts: Shift[];
+  private user: User;
 
   constructor(
     private shiftsService: ShiftService,
     private memeService: MemeService,
-    private shiftService: ShiftService
   ) {
     this.memeService.fetchMems();
   }
@@ -32,7 +30,7 @@ export class UserService implements OnInit, OnDestroy {
     this.shifts = this.shiftsService.getShifts();
   }
 
-  autoSetUser() {
+  autoSetUser(): void {
     if (sessionStorage.getItem('userInput')) {
       const userInput = this.getUserInput();
       this.createUser(
@@ -57,7 +55,7 @@ export class UserService implements OnInit, OnDestroy {
     restDays: number,
     workingHours: number,
     imgUrl: string
-  ) {
+  ): void {
     if (!imgUrl) {
       imgUrl = this.memeService.getMems();
     }
@@ -75,22 +73,20 @@ export class UserService implements OnInit, OnDestroy {
     );
   }
 
-  deleteUser() {
+  deleteUser(): void {
     sessionStorage.removeItem('userInput');
   }
 
-  getUserInput() {
-    if (sessionStorage.getItem('userInput')) {
-      return JSON.parse(<string>sessionStorage.getItem('userInput'));
-    }
+  getUserInput(): UserInput {
+    return JSON.parse(<string>sessionStorage.getItem('userInput'));
   }
 
-  setUser(user: User) {
+  setUser(user: User): void {
     this.user = user;
     this.userChanged.next(this.user);
   }
 
-  getUser() {
+  getUser(): User {
     return this.user;
   }
 
@@ -102,7 +98,7 @@ export class UserService implements OnInit, OnDestroy {
     restDays: number,
     workingHours: number,
     imageUrl?: string
-  ) {
+  ): void {
     this.shiftsService.createShift(
       startDate,
       shiftDays,
@@ -113,31 +109,29 @@ export class UserService implements OnInit, OnDestroy {
       new User(
         name,
         gender,
-        this.totalWorkHours(workingHours, shiftDays),
-        this.totalFreeTime(restDays, workingHours, shiftDays),
+        this.getTotalWorkHours(workingHours, shiftDays),
+        this.getTotalFreeTime(restDays, workingHours, shiftDays),
         this.shiftsService.getShifts(),
         imageUrl
       )
     );
     this.userChanged.next(this.user);
   }
-  totalWorkHours(workingHours: number, shiftDays: number) {
+
+  getTotalWorkHours(workingHours: number, shiftDays: number) {
     return workingHours * shiftDays * this.shiftsService.getShifts().length;
   }
-  totalFreeTime(restDays: number, workingHours: number, shiftDays: number) {
+
+  getTotalFreeTime(restDays: number, workingHours: number, shiftDays: number) {
     let betweenWork =
       (24 - workingHours) * shiftDays * this.shiftsService.getShifts().length;
     let totalRestDays = restDays * (this.shiftsService.getShifts().length - 1);
     return betweenWork + totalRestDays * 24;
   }
 
-  clearUser() {
+  clearUser(): void {
     this.setUser(new User('', '', 0, 0, []));
     this.shiftsService.clearShifts();
     this.userChanged.next(this.user);
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }

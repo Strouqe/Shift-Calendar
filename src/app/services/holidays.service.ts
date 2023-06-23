@@ -1,33 +1,30 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, retry, throwError } from 'rxjs';
-import { Holiday } from '../models/holiday.model';
-
-interface HolidayResponse {
-  response: {
-    holidays: Holiday[];
-  };
-}
+import { Subscription, catchError, retry, throwError } from 'rxjs';
+import { Holiday, HolidayResponse } from '../models/holiday.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HolidaysService {
-  private fetchYearHollidays: Holiday[] = [];
-  private nextYearHoliday: Holiday[] = [];
-  private holidays: Holiday[] = [
-    ...this.fetchYearHollidays,
-    ...this.nextYearHoliday,
-  ];
-  private fetchYear = new Date().getFullYear();
+  fetchYear: number;
+  private fetchYearHollidays: Holiday[];
+  private nextYearHoliday: Holiday[];
+  private holidays: Holiday[];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.fetchYear = new Date().getFullYear();
+    this.fetchYearHollidays = [];
+    this.nextYearHoliday = [];
+    this.holidays = [...this.fetchYearHollidays, ...this.nextYearHoliday];
+  }
 
-  setHolidays(holidays: Holiday[]) {
+  setHolidays(holidays: Holiday[]): void {
     this.holidays = [...this.holidays, ...holidays];
   }
 
-  fetchAllHolidays(url: string) {
+  fetchAllHolidays(url: string): void {
     this.fetchHolidays(url);
     this.fetchNextYearHolidays(url);
     setTimeout(() => {
@@ -36,7 +33,7 @@ export class HolidaysService {
     }, 1000);
   }
 
-  fetchNextYearHolidays(url: string) {
+  fetchNextYearHolidays(url: string): Subscription {
     return this.http
       .get<HolidayResponse>(url + '&year=' + (this.fetchYear + 1))
       .subscribe((res) => {
@@ -44,30 +41,17 @@ export class HolidaysService {
       });
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      console.error('An error occurred:', error.error);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, body was: `,
-        error.error
-      );
-    }
-    return throwError(
-      () => new Error('Something bad happened; please try again later.')
-    );
-  }
-
-  fetchHolidays(url: string) {
+  fetchHolidays(url: string): Subscription {
     return this.http
       .get<HolidayResponse>(url + '&year=' + this.fetchYear)
-      .pipe(retry(), catchError(this.handleError))
       .subscribe((res) => {
         this.fetchYearHollidays = res.response.holidays;
       });
   }
 
-  getHolidays() {
+  getHolidays(): Holiday[] {
     return this.holidays.slice();
   }
+
+
 }

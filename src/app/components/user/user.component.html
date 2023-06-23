@@ -1,3 +1,4 @@
+<!-- TODO please press alt+shift+f -->
 <form
   class="form"
   [formGroup]="userForm"
@@ -22,7 +23,6 @@
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Gender</mat-label>
-
             <select matNativeControl formControlName="gender">
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -100,11 +100,12 @@
         <div class="user-info__totals__calendar">
           <app-calendar></app-calendar></div
       ></mat-tab>
-      <mat-tab label="Chart" class="user-info__tab--chart">
-        <app-pie-chart *ngIf="showInfo"></app-pie-chart>
+      <mat-tab label="Chart">
+        <mat-card class="user-info__tab--chart">
+          <app-pie-chart *ngIf="showInfo"></app-pie-chart>
+        </mat-card>
       </mat-tab>
     </mat-tab-group>
-
     <div class="button">
       <button
         type="button"

@@ -22,40 +22,33 @@ export class CalendarComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   startDate = new Date();
   calendarForm: FormGroup;
-  showCalendar = false;
+  showCalendar: boolean;
 
   constructor(
     private shiftsService: ShiftService,
     private userService: UserService,
-    private holidayService: HolidaysService,
+    private holidayService: HolidaysService
   ) {}
 
   ngOnInit(): void {
+    this.showCalendar = false;
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe((user: User) => {
-      this.shifts = user.shifts;
-    });
+    this.subscription = this.userService.userChanged.subscribe(
+      (user: User) => (this.shifts = user.shifts)
+    );
     this.shifts = this.shiftsService.getShifts();
   }
-
-  private initForm() {
-    this.calendarForm = new FormGroup({
-      userName: new FormControl(null, Validators.required),
-      gender: new FormControl(null, Validators.required),
-      startDate: new FormControl(this.startDate, Validators.required),
-      shiftDays: new FormControl(null, Validators.required),
-      restDays: new FormControl(null, Validators.required),
-      workingHours: new FormControl(null, Validators.required),
-    });
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
-  toggleCalendar() {
+  toggleCalendar(): void {
     this.showCalendar = !this.showCalendar;
   }
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
-    const month = cellDate.getMonth();
-    const year = cellDate.getFullYear();
+    const month: number = cellDate.getMonth();
+    const year: number = cellDate.getFullYear();
     if (view === 'month') {
       for (let i = 0; i < this.holidayService.getHolidays().length; i++) {
         if (
@@ -65,7 +58,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
           return 'holiday';
         }
       }
-      for (let i = 0; i < this.shifts.length; i++) {
+      for (let i: number = 0; i < this.shifts.length; i++) {
         if (
           (year === this.shifts[i].startDate.getFullYear() &&
             month === this.shifts[i].startDate.getMonth()) ||
@@ -84,12 +77,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return '';
   };
 
-  onSubmit() {
+  onSubmit(): void {
     this.shiftsService.setShifts([]);
-    console.log(
-      'startDate',
-      this.calendarForm.value['startDate'].toISOString().split('T')[0]
-    );
     this.shiftsService.createShift(
       this.calendarForm.value['startDate'].toISOString().split('T')[0],
       this.calendarForm.value['shiftDays'],
@@ -99,7 +88,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.showCalendar = !this.showCalendar;
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  private initForm(): void {
+    this.calendarForm = new FormGroup({
+      userName: new FormControl(null, Validators.required),
+      gender: new FormControl(null, Validators.required),
+      startDate: new FormControl(this.startDate, Validators.required),
+      shiftDays: new FormControl(null, Validators.required),
+      restDays: new FormControl(null, Validators.required),
+      workingHours: new FormControl(null, Validators.required),
+    });
   }
 }

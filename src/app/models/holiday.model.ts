@@ -20,3 +20,9 @@ export class Holiday {
   public type: string[];
   public uuid: string;
 }
+
+export interface HolidayResponse {
+  response: {
+    holidays: Holiday[];
+  };
+}

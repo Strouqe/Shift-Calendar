@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { set } from 'date-fns';
 import { GeocoderResponse } from '../models/geocode-responce.model';
 import { HolidaysService } from './holidays.service';
 
@@ -7,11 +6,10 @@ import { HolidaysService } from './holidays.service';
   providedIn: 'root',
 })
 export class GeoService {
+  userCountry: string | undefined;
   private geolocationWorking = false;
   private geocoderWorking = false;
   constructor(private holidayService: HolidaysService) {}
-
-  public userCountry: string | undefined;
 
   set setCountry(country: string) {
     this.userCountry = country;
@@ -26,14 +24,12 @@ export class GeoService {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.geolocationWorking = false;
-
         const latitude: number = position.coords.latitude;
         const longitude: number = position.coords.longitude;
         const point: google.maps.LatLngLiteral = {
           lat: latitude,
           lng: longitude,
         };
-
         this.geocoderWorking = true;
         this.geocodeLatLng(point)
           .then((response: GeocoderResponse) => {
@@ -44,8 +40,8 @@ export class GeoService {
                   value.address_components.length - 1
                 ].short_name;
 
-              let url =
-                'https://calendarific.com/api/v2/holidays?api_key=66ab7b1eafc10c308f535e183762ec1ddfab6d5c&country=' +
+              let url: string =
+                'https://calendarific.com/api/v2/holidays?api_key=30bd35becec0c63d9b71453ffccaa74dc214c934&country=' +
                 this.userCountry;
               this.holidayService.fetchAllHolidays(url);
             } else {
@@ -58,7 +54,6 @@ export class GeoService {
       },
       (error) => {
         this.geolocationWorking = false;
-
         if (error.PERMISSION_DENIED) {
           console.log("Couldn't get your location", 'Permission denied');
         } else if (error.POSITION_UNAVAILABLE) {
@@ -74,7 +69,7 @@ export class GeoService {
   }
 
   geocodeLatLng(latlng: google.maps.LatLngLiteral): Promise<GeocoderResponse> {
-    let geocoder = new google.maps.Geocoder();
+    let geocoder: google.maps.Geocoder = new google.maps.Geocoder();
 
     return new Promise((resolve, reject) => {
       geocoder.geocode({ location: latlng }, (results, status) => {

@@ -24,3 +24,13 @@ export class User {
     this.imageUrl = imageUrl;
   }
 }
+
+export interface UserInput {
+  name: string;
+  gender: string;
+  startDate: string;
+  shiftDays: number;
+  restDays: number;
+  workingHours: number;
+  imgUrl: string;
+}

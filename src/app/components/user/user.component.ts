@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 import { User } from '../../models/user.model';
 import { GeoService } from '../../services/geo.service';
 import { MemeService } from '../../services/meme.service';
 import { ShiftService } from '../../services/shift.service';
-import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user',
@@ -15,29 +15,29 @@ import { UserService } from '../../services/user.service';
 export class UserComponent implements OnInit {
   changedUser = new Subject<User>();
   subscription: Subscription;
-  showInfo = false;
+  showInfo: boolean;
   user: User;
   totalWorkedHours: string;
   totalOffDays: string;
   totalRest: string;
-
-  startDate = new Date();
+  startDate: Date;
   userForm: FormGroup;
 
   constructor(
     private userService: UserService,
     private memeService: MemeService,
     private geoService: GeoService,
-    private shiftService: ShiftService
+    private shiftService: ShiftService,
   ) {}
 
   ngOnInit(): void {
+    this.startDate = new Date();
+    this.showInfo = false;
     this.geoService.getCurrentLocation();
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe((user: User) => {
-      this.user = user;
-    });
-
+    this.subscription = this.userService.userChanged.subscribe(
+      (user: User) => this.user = user
+    );
     this.userService.autoSetUser();
     if (this.user) {
       this.showInfo = true;
@@ -47,19 +47,7 @@ export class UserComponent implements OnInit {
     }
   }
 
-  private initForm() {
-    this.userForm = new FormGroup({
-      userName: new FormControl(null, Validators.required),
-      imageUrl: new FormControl(null),
-      gender: new FormControl(null, Validators.required),
-      startDate: new FormControl(this.startDate, Validators.required),
-      shiftDays: new FormControl(null, Validators.required),
-      restDays: new FormControl(null, Validators.required),
-      workingHours: new FormControl(null, Validators.required),
-    });
-  }
-
-  onSubmit() {
+  onSubmit(): void {
     this.userService.clearUser();
     this.userService.createUser(
       this.userForm.value.userName,
@@ -93,32 +81,40 @@ export class UserComponent implements OnInit {
     return `${days} days, ${hours} hours, ${minuets} minuets`;
   }
 
-  formatValues() {
+  formatValues(): void {
     if (this.user) {
       this.totalWorkedHours = this.user.totalWorkHours.toString();
-      // this.totalWorkedHours = this.splitTime(
-      //   this.user.totalWorkHours -
-      //     this.user.shifts[0].workingHours * this.shiftService.sumHolidays()
-      // );
       this.totalOffDays = (
         +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24 +
         this.shiftService.sumHolidays()
       ).toString();
       this.totalRest = (
         this.user.totalFreeHours +
-          this.shiftService.sumHolidays() * 24 -
-          (24 - this.user.shifts[0].workingHours) *
-            this.shiftService.sumHolidays()
+        this.shiftService.sumHolidays() * 24 -
+        (24 - this.user.shifts[0].workingHours) *
+          this.shiftService.sumHolidays()
       ).toString();
     }
   }
 
-  onReset() {
+  onReset(): void {
     this.userForm.reset();
     this.userService.clearUser();
     this.showInfo = false;
     this.userService.deleteUser();
     this.memeService.fetchMems();
     this.memeService.getMems();
+  }
+
+  private initForm(): void {
+    this.userForm = new FormGroup({
+      userName: new FormControl(null, Validators.required),
+      imageUrl: new FormControl(null),
+      gender: new FormControl(null, Validators.required),
+      startDate: new FormControl(this.startDate, Validators.required),
+      shiftDays: new FormControl(null, Validators.required),
+      restDays: new FormControl(null, Validators.required),
+      workingHours: new FormControl(null, Validators.required),
+    });
   }
 }
