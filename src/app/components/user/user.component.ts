@@ -15,6 +15,7 @@ import { ShiftService } from '../../services/shift.service';
 export class UserComponent implements OnInit {
   changedUser = new Subject<User>();
   subscription: Subscription;
+  memeSubscription: Subscription;
   showInfo: boolean;
   user: User;
   totalWorkedHours: string;
@@ -22,13 +23,23 @@ export class UserComponent implements OnInit {
   totalRest: string;
   startDate: Date;
   userForm: FormGroup;
+  imageUrl: string;
+  memeUrl: string;
 
   constructor(
     private userService: UserService,
     private memeService: MemeService,
     private geoService: GeoService,
-    private shiftService: ShiftService,
+    private shiftService: ShiftService
   ) {}
+
+  handleRefreshImage(): void {
+    this.memeService.fetchMems();
+    this.memeSubscription.unsubscribe();
+    this.memeSubscription = this.memeService.memeChanged.subscribe(
+      (url: string) => (this.imageUrl = url)
+    );
+  }
 
   ngOnInit(): void {
     this.startDate = new Date();
@@ -36,15 +47,27 @@ export class UserComponent implements OnInit {
     this.geoService.getCurrentLocation();
     this.initForm();
     this.subscription = this.userService.userChanged.subscribe(
-      (user: User) => this.user = user
+      (user: User) => (this.user = user)
     );
+    this.memeService.fetchMems();
+    this.memeSubscription = this.memeService.memeChanged.subscribe(
+      (url: string) => (this.memeUrl = url)
+    );
+
     this.userService.autoSetUser();
     if (this.user) {
+      if (this.user.imageUrl) {
+        this.setImageUrl(this.user.imageUrl);
+      }
       this.showInfo = true;
     }
     if (this.user) {
       this.formatValues();
     }
+  }
+
+  setImageUrl(url: string): void {
+    this.imageUrl = url;
   }
 
   onSubmit(): void {
@@ -58,7 +81,7 @@ export class UserComponent implements OnInit {
       this.userForm.value.workingHours,
       this.userForm.value.imageUrl
         ? this.userForm.value.imageUrl
-        : this.memeService.getMems()
+        : this.memeUrl
     );
     this.userService.saveUserInput(
       this.userForm.value.userName,
@@ -69,6 +92,7 @@ export class UserComponent implements OnInit {
       this.userForm.value.workingHours,
       this.userForm.value.imageUrl
     );
+    this.setImageUrl(this.userForm.value.imageUrl ? this.userForm.value.imageUrl : this.memeUrl);
     this.showInfo = true;
     this.formatValues();
   }

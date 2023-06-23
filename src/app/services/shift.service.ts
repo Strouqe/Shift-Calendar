@@ -66,7 +66,6 @@ export class ShiftService {
       workingHours,
       holidays
     );
-
     if (this.shifts.length === 0) {
       this.shifts.push(shift);
       this.setShifts(this.shifts);

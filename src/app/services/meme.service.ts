@@ -13,10 +13,12 @@ export class MemeService {
 
   constructor(private http: HttpClient) {
     this.url = 'https://meme-api.com/gimme';
+    this.meme = '';
   }
 
   fetchMems(): Subscription {
-    return this.http.get<MemeResponse>(this.url).pipe(retry(), catchError(this.handleError)).subscribe((res) => {
+    return this.http.get<MemeResponse>(this.url).pipe(retry(), catchError(this.handleError))
+    .subscribe((res) => {
       this.meme = res.preview[0];
       this.memeChanged.next(this.meme);
       console.log('meme is loaded ============>', this.meme);

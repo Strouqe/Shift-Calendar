@@ -16,9 +16,9 @@ export class UserService implements OnInit {
 
   constructor(
     private shiftsService: ShiftService,
-    private memeService: MemeService,
+    private memeService: MemeService
   ) {
-    this.memeService.fetchMems();
+    // this.memeService.fetchMems();
   }
 
   ngOnInit(): void {
