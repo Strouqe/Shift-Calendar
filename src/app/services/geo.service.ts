@@ -39,7 +39,6 @@ export class GeoService {
           .then((response: GeocoderResponse) => {
             if (response.status === 'OK' && response.results?.length) {
               const value = response.results[0];
-              console.log('value ============>', value);
               this.userCountry =
                 value.address_components[
                   value.address_components.length - 1
@@ -55,7 +54,6 @@ export class GeoService {
           })
           .finally(() => {
             this.geocoderWorking = false;
-            console.log('userCountry ============>', this.userCountry);
           });
       },
       (error) => {

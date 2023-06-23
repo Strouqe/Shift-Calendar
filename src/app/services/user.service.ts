@@ -21,10 +21,7 @@ export class UserService implements OnInit, OnDestroy {
     private memeService: MemeService,
     private shiftService: ShiftService
   ) {
-    console.log(
-      'memasiki ====================================',
       this.memeService.fetchMems()
-    );
   }
 
   ngOnInit(): void {
@@ -123,9 +120,7 @@ export class UserService implements OnInit, OnDestroy {
         imageUrl
       )
     );
-
     this.userChanged.next(this.user);
-    console.log('user', this.user);
   }
   totalWorkHours(workingHours: number, shiftDays: number) {
     return workingHours * shiftDays * this.shiftsService.getShifts().length;

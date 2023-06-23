@@ -43,9 +43,7 @@ export class HolidaysService {
     return this.http
       .get<HolidayResponse>(url + '&year=' + (this.fetchYear + 1))
       .subscribe((res) => {
-        console.log('res ============>', res);
         this.nextYearHoliday = res.response.holidays;
-        console.log('nextYearsHolidays ============>', this.nextYearHoliday);
       });
   }
 
@@ -53,12 +51,7 @@ export class HolidaysService {
     return this.http
       .get<HolidayResponse>(url + '&year=' + this.fetchYear)
       .subscribe((res) => {
-        console.log('res ============>', res);
         this.fetchYearHollidays = res.response.holidays;
-        console.log(
-          'fetchYearHollidays ============>',
-          this.fetchYearHollidays
-        );
       });
   }
 

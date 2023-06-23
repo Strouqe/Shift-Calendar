@@ -19,7 +19,7 @@ export class MemeService {
     return this.http.get<MemeResponse>(this.url).subscribe((res) => {
       this.meme = res.preview[0];
       this.memeChanged.next(this.meme);
-      console.log('meme link ============>', this.meme);
+      console.log('meme is loaded ============>', this.meme);
     });
   }
 

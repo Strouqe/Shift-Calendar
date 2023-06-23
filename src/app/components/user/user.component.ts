@@ -47,7 +47,6 @@ export class UserComponent implements OnInit {
     if (this.user) {
       this.formatValues();
     }
-    console.log('user: ', this.user);
   }
 
   private initForm() {
