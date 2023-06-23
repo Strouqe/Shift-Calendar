@@ -8,7 +8,7 @@ import { MemeService } from '../../services/meme.service';
 import { GeoService } from '../../services/geo.service';
 import { HolidaysService } from '../../services/holidays.service';
 import { ShiftService } from '../../services/shift.service';
-
+// TODO alt+shift+o can help you with unused imports 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -17,7 +17,7 @@ import { ShiftService } from '../../services/shift.service';
 export class UserComponent implements OnInit {
   changedUser = new Subject<User>();
   subscription: Subscription;
-  showInfo = false;
+  showInfo = false; // TODO default initialization should be in onInit
   user: User;
   totalWorkedHours: string;
   totalOffDays: string;
@@ -36,7 +36,7 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
     this.geoService.getCurrentLocation();
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe((user: User) => {
+    this.subscription = this.userService.userChanged.subscribe((user: User) => { // TODO write it in one line without { }
       this.user = user;
     });
 
@@ -49,7 +49,7 @@ export class UserComponent implements OnInit {
     }
   }
 
-  private initForm() {
+  private initForm() { // TODO return type
     this.userForm = new FormGroup({
       userName: new FormControl(null, Validators.required),
       imageUrl: new FormControl(null),
@@ -61,7 +61,7 @@ export class UserComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit() { // TODO return type
     this.userService.clearUser();
     this.userService.createUser(
       this.userForm.value.userName,
@@ -95,7 +95,7 @@ export class UserComponent implements OnInit {
     return `${days} days, ${hours} hours, ${minuets} minuets`;
   }
 
-  formatValues() {
+  formatValues() { // TODO return type
     if (this.user) {
       this.totalWorkedHours = this.splitTime(
         this.user.totalWorkHours -
@@ -114,7 +114,7 @@ export class UserComponent implements OnInit {
     }
   }
 
-  onReset() {
+  onReset() { // TODO return type
     this.userForm.reset();
     this.userService.clearUser();
     this.showInfo = false;

@@ -5,44 +5,45 @@ import add from 'date-fns/add';
 
 import { Shift } from '../models/shift.model';
 import { HolidaysService } from './holidays.service';
+// TODO alt+shift+o alphabet + unused imports 
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShiftService {
   shiftsChanged = new Subject<Shift[]>();
-  private shifts: Shift[] = [];
+  private shifts: Shift[] = []; // TODO where is spaces?
   constructor(
     private holidayService: HolidaysService,
-  ) {}
+  ) { }
 
-  setShifts(shifts: Shift[]) {
+  setShifts(shifts: Shift[]) { // TODO return type
     this.shifts = shifts;
     this.shiftsChanged.next(this.shifts.slice());
   }
 
-  getShifts() {
+  getShifts() { // TODO return type
     return this.shifts.slice();
   }
 
-  getShift(index: number) {
+  getShift(index: number) { // TODO return type
     return this.shifts[index];
   }
 
-  addShift(shift: Shift) {
+  addShift(shift: Shift) { // TODO return type
     this.shifts.push(shift);
   }
 
-  updateShift(index: number, newShift: Shift) {
+  updateShift(index: number, newShift: Shift) { // TODO return type
     this.shifts[index] = newShift;
   }
 
-  deleteShift(index: number) {
+  deleteShift(index: number) { // TODO return type
     this.shifts.splice(index, 1);
   }
 
-  addDays = (date: Date, days: number): Date => {
-    let result = new Date(date);
+  addDays = (date: Date, days: number): Date => { // TODO what is it and why after functions?
+    let result = new Date(date); // TODO  type
     result.setDate(+(result.getDate() + +days));
     return result;
   };
@@ -57,17 +58,17 @@ export class ShiftService {
     shiftDays: number,
     restDays: number,
     workingHours: number
-  ) {
-    let endDate = this.addDays(new Date(startDate), shiftDays);
+  ) { // TODO this function is too big) please split it into some smallest 
+    let endDate = this.addDays(new Date(startDate), shiftDays); // TODO type
 
-    let holidays = this.holidayService.getHolidays().filter((holiday) => {
+    let holidays = this.holidayService.getHolidays().filter((holiday) => { // TODO type
       return (
         compareAsc(new Date(holiday.date.iso), new Date(startDate)) !== -1 &&
         compareAsc(new Date(holiday.date.iso), endDate) === -1
       );
     });
 
-    let shift = new Shift(
+    let shift = new Shift( // TODO type
       new Date(startDate),
       endDate,
       shiftDays,
@@ -76,7 +77,7 @@ export class ShiftService {
       holidays
     );
 
-    let newStartDate = this.addDays(endDate, restDays)
+    let newStartDate = this.addDays(endDate, restDays) // TODO type
       .toISOString()
       .split('T')[0];
 

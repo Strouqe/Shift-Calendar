@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { set } from 'date-fns';
 import { GeocoderResponse } from '../models/geocode-responce.model';
 import { HolidaysService } from './holidays.service';
+// TODO alt+shift+o alphabet + unused imports 
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class GeoService {
   private geocoderWorking = false;
   constructor(private holidayService: HolidaysService) {}
 
-  public userCountry: string | undefined;
+  public userCountry: string | undefined;  // TODO public before private and without public word 
 
   set setCountry(country: string) {
     this.userCountry = country;
@@ -44,7 +45,7 @@ export class GeoService {
                   value.address_components.length - 1
                 ].short_name;
 
-              let url =
+              let url = // TODO type
                 'https://calendarific.com/api/v2/holidays?api_key=66ab7b1eafc10c308f535e183762ec1ddfab6d5c&country=' +
                 this.userCountry;
               this.holidayService.fetchAllHolidays(url);
@@ -74,7 +75,7 @@ export class GeoService {
   }
 
   geocodeLatLng(latlng: google.maps.LatLngLiteral): Promise<GeocoderResponse> {
-    let geocoder = new google.maps.Geocoder();
+    let geocoder = new google.maps.Geocoder(); // TODO type
 
     return new Promise((resolve, reject) => {
       geocoder.geocode({ location: latlng }, (results, status) => {

@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
-import { Subscription } from 'rxjs';
 import compareAsc from 'date-fns/compareAsc';
+import { Subscription } from 'rxjs';
 
-import { ShiftService } from '../../services/shift.service';
+import { formatISO } from 'date-fns';
 import { Shift } from '../../models/shift.model';
-import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { HolidaysService } from '../../services/holidays.service';
-import { formatISO } from 'date-fns';
+import { ShiftService } from '../../services/shift.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-calendar',
@@ -22,7 +22,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   startDate = new Date();
   calendarForm: FormGroup;
-  showCalendar = false;
+  showCalendar = false; // TODO init variables should be inside onInit
 
   constructor(
     private shiftsService: ShiftService,
@@ -32,13 +32,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe((user: User) => {
+    this.subscription = this.userService.userChanged.subscribe((user: User) => { // TODO if you have only one line here, you can write in without {} subscribe((user: User)=> this.shifts = user.shifts);
       this.shifts = user.shifts;
     });
     this.shifts = this.shiftsService.getShifts();
   }
 
-  private initForm() {
+  private initForm() { // TODO return type
     this.calendarForm = new FormGroup({
       userName: new FormControl(null, Validators.required),
       gender: new FormControl(null, Validators.required),
@@ -49,13 +49,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleCalendar() {
+  toggleCalendar() { // TODO return type
     this.showCalendar = !this.showCalendar;
   }
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
-    const month = cellDate.getMonth();
-    const year = cellDate.getFullYear();
+    const month = cellDate.getMonth(); // TODO Type
+    const year = cellDate.getFullYear(); // TODO Type
     if (view === 'month') {
       for (let i = 0; i < this.holidayService.getHolidays().length; i++) {
         if (
@@ -65,7 +65,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
           return 'holiday';
         }
       }
-      for (let i = 0; i < this.shifts.length; i++) {
+      for (let i = 0; i < this.shifts.length; i++) { // TODO Type let i: number = 0;
         if (
           (year === this.shifts[i].startDate.getFullYear() &&
             month === this.shifts[i].startDate.getMonth()) ||
@@ -84,12 +84,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return '';
   };
 
-  onSubmit() {
+  onSubmit() { // TODO return type
     this.shiftsService.setShifts([]);
     console.log(
       'startDate',
       this.calendarForm.value['startDate'].toISOString().split('T')[0]
-    );
+    ); // TODO hellooo looogs
     this.shiftsService.createShift(
       this.calendarForm.value['startDate'].toISOString().split('T')[0],
       this.calendarForm.value['shiftDays'],
@@ -99,7 +99,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.showCalendar = !this.showCalendar;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy() { // TODO lifecycle hooks should be in the top of class after constructor, on init, on destroy after that public functions, after that private functions
     this.subscription.unsubscribe();
   }
 }

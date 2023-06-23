@@ -6,14 +6,14 @@ import {
   ApexChart
 } from "ng-apexcharts";
 
-import { UserService } from "../../services/user.service";
+import { UserService } from "../../services/user.service";   // TODO alt+shift+o
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
   chart: ApexChart;
   responsive: ApexResponsive[];
   labels: any;
-};
+};   // TODO export type should be in models folder, create file like chart-options.ts
 
 @Component({
   selector: 'app-pie-chart',
@@ -21,10 +21,13 @@ export type ChartOptions = {
   styleUrls: ['./pie-chart.component.scss']
 })
 export class PieChartComponent {
-  @ViewChild("chart") chart: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
+  @ViewChild("chart") chart: ChartComponent;  // TODO viewchild + view children should be after all variables 
+  public chartOptions: Partial<ChartOptions>; // TODO variables is public by default, you can write it without public
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService) { // TODO constructor (
+ //   private userService: UserService,
+//  ) {
+//}
     this.chartOptions = {
       series: [this.userService.getUser().totalWorkHours, this.userService.getUser().totalFreeHours],
       chart: {
