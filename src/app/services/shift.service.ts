@@ -47,8 +47,6 @@ export class ShiftService {
     this.shiftsChanged.next(this.shifts.slice());
   }
 
-
-
   createShift(
     startDate: string,
     shiftDays: number,
