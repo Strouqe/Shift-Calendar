@@ -1,7 +1,7 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { catchError, retry, throwError } from 'rxjs';
 import { Holiday } from '../models/holiday.model';
-import { set } from 'date-fns';
 
 interface HolidayResponse {
   response: {
@@ -19,12 +19,9 @@ export class HolidaysService {
     ...this.fetchYearHollidays,
     ...this.nextYearHoliday,
   ];
+  private fetchYear = new Date().getFullYear();
 
-  constructor(
-    private http: HttpClient,
-  ) {}
-
-  fetchYear = new Date().getFullYear();
+  constructor(private http: HttpClient) {}
 
   setHolidays(holidays: Holiday[]) {
     this.holidays = [...this.holidays, ...holidays];
@@ -47,9 +44,24 @@ export class HolidaysService {
       });
   }
 
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      console.error('An error occurred:', error.error);
+    } else {
+      console.error(
+        `Backend returned code ${error.status}, body was: `,
+        error.error
+      );
+    }
+    return throwError(
+      () => new Error('Something bad happened; please try again later.')
+    );
+  }
+
   fetchHolidays(url: string) {
     return this.http
       .get<HolidayResponse>(url + '&year=' + this.fetchYear)
+      .pipe(retry(), catchError(this.handleError))
       .subscribe((res) => {
         this.fetchYearHollidays = res.response.holidays;
       });

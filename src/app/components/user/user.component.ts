@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { User } from '../../models/user.model';
-import { UserService } from '../../services/user.service';
-import { formatDuration, intervalToDuration } from 'date-fns';
-import { MemeService } from '../../services/meme.service';
 import { GeoService } from '../../services/geo.service';
-import { HolidaysService } from '../../services/holidays.service';
+import { MemeService } from '../../services/meme.service';
 import { ShiftService } from '../../services/shift.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user',
@@ -30,7 +28,7 @@ export class UserComponent implements OnInit {
     private userService: UserService,
     private memeService: MemeService,
     private geoService: GeoService,
-    private shiftService: ShiftService,
+    private shiftService: ShiftService
   ) {}
 
   ngOnInit(): void {
@@ -97,20 +95,21 @@ export class UserComponent implements OnInit {
 
   formatValues() {
     if (this.user) {
-      this.totalWorkedHours = this.splitTime(
-        this.user.totalWorkHours -
-          this.user.shifts[0].workingHours * this.shiftService.sumHolidays()
-      );
-      this.totalOffDays = this.splitTime(
+      this.totalWorkedHours = this.user.totalWorkHours.toString();
+      // this.totalWorkedHours = this.splitTime(
+      //   this.user.totalWorkHours -
+      //     this.user.shifts[0].workingHours * this.shiftService.sumHolidays()
+      // );
+      this.totalOffDays = (
         +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24 +
-          this.shiftService.sumHolidays()
-      );
-      this.totalRest = this.splitTime(
+        this.shiftService.sumHolidays()
+      ).toString();
+      this.totalRest = (
         this.user.totalFreeHours +
           this.shiftService.sumHolidays() * 24 -
           (24 - this.user.shifts[0].workingHours) *
             this.shiftService.sumHolidays()
-      );
+      ).toString();
     }
   }
 
