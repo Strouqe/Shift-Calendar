@@ -1,11 +1,11 @@
 import { Component, ViewChild } from "@angular/core";
 import { ChartComponent } from "ng-apexcharts";
-
 import {
   ApexNonAxisChartSeries,
   ApexResponsive,
   ApexChart
 } from "ng-apexcharts";
+
 import { UserService } from "../../services/user.service";
 
 export type ChartOptions = {
@@ -14,7 +14,6 @@ export type ChartOptions = {
   responsive: ApexResponsive[];
   labels: any;
 };
-
 
 @Component({
   selector: 'app-pie-chart',

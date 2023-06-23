@@ -16,8 +16,15 @@ export class UserService implements OnInit, OnDestroy {
 
   subscription: Subscription;
 
-  constructor(private shiftsService: ShiftService, private memeService: MemeService) {
-    console.log('memasiki ====================================', this.memeService.fetchMems())
+  constructor(
+    private shiftsService: ShiftService,
+    private memeService: MemeService,
+    private shiftService: ShiftService
+  ) {
+    console.log(
+      'memasiki ====================================',
+      this.memeService.fetchMems()
+    );
   }
 
   ngOnInit(): void {
@@ -32,23 +39,44 @@ export class UserService implements OnInit, OnDestroy {
   autoSetUser() {
     if (sessionStorage.getItem('userInput')) {
       const userInput = this.getUserInput();
-      this.createUser(userInput.name, userInput.gender, userInput.startDate, userInput.shiftDays, userInput.restDays, userInput.workingHours, userInput.imgUrl)
+      this.createUser(
+        userInput.name,
+        userInput.gender,
+        userInput.startDate,
+        userInput.shiftDays,
+        userInput.restDays,
+        userInput.workingHours,
+        userInput.imgUrl
+      );
     } else {
       return;
     }
   }
 
-  saveUserInput(name: string,
+  saveUserInput(
+    name: string,
     gender: string,
     startDate: string,
     shiftDays: number,
     restDays: number,
     workingHours: number,
-    imgUrl: string) {
-      if(!imgUrl) {
-        imgUrl = this.memeService.getMems();
-      }
-    sessionStorage.setItem('userInput', JSON.stringify({name, gender, startDate, shiftDays, restDays, workingHours, imgUrl}));
+    imgUrl: string
+  ) {
+    if (!imgUrl) {
+      imgUrl = this.memeService.getMems();
+    }
+    sessionStorage.setItem(
+      'userInput',
+      JSON.stringify({
+        name,
+        gender,
+        startDate,
+        shiftDays,
+        restDays,
+        workingHours,
+        imgUrl,
+      })
+    );
   }
 
   deleteUser() {

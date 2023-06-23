@@ -19,7 +19,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { CommonModule } from '@angular/common';
 
 import { UserComponent } from './components/user/user.component';
-import { ShiftsComponent } from './components/shifts/shifts.component';
+
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 
 @NgModule({
@@ -27,8 +27,7 @@ import { PieChartComponent } from './components/pie-chart/pie-chart.component';
     AppComponent,
     CalendarComponent,
     UserComponent,
-    ShiftsComponent,
-    PieChartComponent
+    PieChartComponent,
   ],
   imports: [
     BrowserModule,

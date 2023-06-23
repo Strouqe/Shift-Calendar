@@ -30,12 +30,11 @@ export class UserComponent implements OnInit {
     private userService: UserService,
     private memeService: MemeService,
     private geoService: GeoService,
-    private holidaysService: HolidaysService,
-    private shiftService: ShiftService
+    private shiftService: ShiftService,
   ) {}
 
   ngOnInit(): void {
-    this.geoService.getUserCountry();
+    this.geoService.getCurrentLocation();
     this.initForm();
     this.subscription = this.userService.userChanged.subscribe((user: User) => {
       this.user = user;
@@ -49,19 +48,6 @@ export class UserComponent implements OnInit {
       this.formatValues();
     }
     console.log('user: ', this.user);
-    console.log('geo =====>', this.geoService.getUserCountry());
-
-    let country =
-      sessionStorage.getItem('userCountry') &&
-      JSON.parse(<string>sessionStorage.getItem('userCountry')).country
-        .short_name;
-
-    let url =
-      'https://calendarific.com/api/v2/holidays?api_key=66ab7b1eafc10c308f535e183762ec1ddfab6d5c&country=' +
-      country;
-
-    console.log('country =====>', country);
-    this.holidaysService.fetchAllHolidays(url);
   }
 
   private initForm() {

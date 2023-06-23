@@ -12,7 +12,9 @@ import { HolidaysService } from './holidays.service';
 export class ShiftService {
   shiftsChanged = new Subject<Shift[]>();
   private shifts: Shift[] = [];
-  constructor(private holidayService: HolidaysService) {}
+  constructor(
+    private holidayService: HolidaysService,
+  ) {}
 
   setShifts(shifts: Shift[]) {
     this.shifts = shifts;
@@ -62,8 +64,8 @@ export class ShiftService {
       return (
         compareAsc(new Date(holiday.date.iso), new Date(startDate)) !== -1 &&
         compareAsc(new Date(holiday.date.iso), endDate) === -1
-        );
-      });
+      );
+    });
 
     let shift = new Shift(
       new Date(startDate),
