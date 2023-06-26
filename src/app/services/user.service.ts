@@ -19,34 +19,30 @@ export class UserService implements OnInit {
 
   constructor(
     private shiftsService: ShiftService,
-    private memeService: MemeService
+    private memeService: MemeService,
   ) {
     this.memeUrl = "";
+    if (sessionStorage.getItem('userInput') && !this.memeUrl) {
+      this.memeUrl = this.getUserInput().imgUrl;
+    }
     this.memsSubscription = this.memeService.memeChanged.subscribe(
       (url: string) => {
         this.memeUrl = url;
         this.memeChanged.next(this.memeUrl);
-        console.log("user service meme changed ======>",this.memeUrl);
       }
     );
     if(!sessionStorage.getItem('userInput')){
       this.memeService.fetchMems();
     }
-    if (sessionStorage.getItem('userInput') && !this.memeUrl) {
-      this.memeUrl = this.getUserInput().imgUrl;
-    }
-  }
-
-  ngOnInit(): void {
-
     this.shiftsSubscription = this.shiftsService.shiftsChanged.subscribe(
       (shifts: Shift[]) => {
         this.shifts = shifts;
       }
     );
-    // this.memeService.fetchMems();
     this.shifts = this.shiftsService.getShifts();
   }
+
+  ngOnInit(): void {}
 
   handleRefreshImage(): void {
     this.memeService.fetchMems();
@@ -138,13 +134,14 @@ export class UserService implements OnInit {
       )
     );
     this.userChanged.next(this.user);
+    console.log(this.user);
   }
 
-  getTotalWorkHours(workingHours: number, shiftDays: number) {
+  getTotalWorkHours(workingHours: number, shiftDays: number): number {
     return workingHours * shiftDays * this.shiftsService.getShifts().length;
   }
 
-  getTotalFreeTime(restDays: number, workingHours: number, shiftDays: number) {
+  getTotalFreeTime(restDays: number, workingHours: number, shiftDays: number): number {
     let betweenWork =
       (24 - workingHours) * shiftDays * this.shiftsService.getShifts().length;
     let totalRestDays = restDays * (this.shiftsService.getShifts().length - 1);

@@ -40,6 +40,7 @@ export class GeoService {
                   value.address_components.length - 1
                 ].short_name;
 
+                console.log(this.userCountry);
               let url: string =
                 'https://calendarific.com/api/v2/holidays?api_key=30bd35becec0c63d9b71453ffccaa74dc214c934&country=' +
                 this.userCountry;

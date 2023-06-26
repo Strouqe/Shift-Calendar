@@ -4,7 +4,6 @@ import { Subject, Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { User } from '../../models/user.model';
 import { GeoService } from '../../services/geo.service';
-import { MemeService } from '../../services/meme.service';
 import { ShiftService } from '../../services/shift.service';
 
 @Component({
@@ -30,19 +29,11 @@ export class UserComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    // private memeService: MemeService,
     private geoService: GeoService,
     private shiftService: ShiftService
   ) {}
 
   handleRefreshImage(): void {
-    // if(!this.memeImageSubscription){
-
-    //   this.memeImageSubscription = this.memeService.memeChanged.subscribe(
-    //     (url: string) => { this.imageUrl = url
-    //     }
-    //   );
-    // }
     this.userService.handleRefreshImage();
   }
 
@@ -51,25 +42,18 @@ export class UserComponent implements OnInit {
     this.showInfo = false;
     this.geoService.getCurrentLocation();
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe(
-      (user: User) => {this.user = user
-        this.imageUrl = user.imageUrl!;
-      ;}
-    );
-    // this.memeService.fetchMems();
+    this.subscription = this.userService.userChanged.subscribe((user: User) => {
+      this.user = user;
+      this.imageUrl = user.imageUrl!;
+    });
     this.memeImageSubscription = this.userService.memeChanged.subscribe(
       (url: string) => {
-        console.log('user component meme changed ======>', url);
         this.imageUrl = url;
-        // this.setImageUrl(url);
       }
     );
-
     this.userService.autoSetUser();
     if (this.user) {
-
-        this.setImageUrl(this.user.imageUrl!);
-
+      this.setImageUrl(this.user.imageUrl!);
       this.showInfo = true;
     }
     if (this.user) {
@@ -102,7 +86,9 @@ export class UserComponent implements OnInit {
       this.userForm.value.imageUrl
     );
     this.setImageUrl(
-      this.userForm.value.imageUrl ? this.userForm.value.imageUrl : this.userService.memeUrl
+      this.userForm.value.imageUrl
+        ? this.userForm.value.imageUrl
+        : this.userService.memeUrl
     );
     this.showInfo = true;
     this.formatValues();
@@ -137,8 +123,6 @@ export class UserComponent implements OnInit {
     this.userService.clearUser();
     this.showInfo = false;
     this.userService.deleteUser();
-    // this.memeService.fetchMems();
-    // this.memeService.getMems();
   }
 
   private initForm(): void {

@@ -30,7 +30,8 @@ export class HolidaysService {
     setTimeout(() => {
       this.setHolidays(this.fetchYearHollidays);
       this.setHolidays(this.nextYearHoliday);
-    }, 1000);
+      console.log(this.holidays);
+    }, 1500);
   }
 
   fetchNextYearHolidays(url: string): Subscription {
