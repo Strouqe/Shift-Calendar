@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, retry, take, throwError } from 'rxjs';
 import { MemeResponse } from '../models/memeResponse.model';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',

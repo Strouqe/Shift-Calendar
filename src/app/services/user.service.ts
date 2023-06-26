@@ -10,24 +10,46 @@ import { ShiftService } from './shift.service';
 })
 export class UserService implements OnInit {
   userChanged = new Subject<User>();
-  subscription: Subscription;
+  memeChanged = new Subject<string>();
+  shiftsSubscription: Subscription;
+  memsSubscription: Subscription;
   shifts: Shift[];
+  memeUrl: string;
   private user: User;
 
   constructor(
     private shiftsService: ShiftService,
     private memeService: MemeService
   ) {
-    // this.memeService.fetchMems();
+    this.memeUrl = "";
+    this.memsSubscription = this.memeService.memeChanged.subscribe(
+      (url: string) => {
+        this.memeUrl = url;
+        this.memeChanged.next(this.memeUrl);
+        console.log("user service meme changed ======>",this.memeUrl);
+      }
+    );
+    if(!sessionStorage.getItem('userInput')){
+      this.memeService.fetchMems();
+    }
+    if (sessionStorage.getItem('userInput') && !this.memeUrl) {
+      this.memeUrl = this.getUserInput().imgUrl;
+    }
   }
 
   ngOnInit(): void {
-    this.subscription = this.shiftsService.shiftsChanged.subscribe(
+
+    this.shiftsSubscription = this.shiftsService.shiftsChanged.subscribe(
       (shifts: Shift[]) => {
         this.shifts = shifts;
       }
     );
+    // this.memeService.fetchMems();
     this.shifts = this.shiftsService.getShifts();
+  }
+
+  handleRefreshImage(): void {
+    this.memeService.fetchMems();
   }
 
   autoSetUser(): void {
@@ -112,7 +134,7 @@ export class UserService implements OnInit {
         this.getTotalWorkHours(workingHours, shiftDays),
         this.getTotalFreeTime(restDays, workingHours, shiftDays),
         this.shiftsService.getShifts(),
-        imageUrl
+        imageUrl ? imageUrl : this.memeUrl
       )
     );
     this.userChanged.next(this.user);
@@ -130,7 +152,7 @@ export class UserService implements OnInit {
   }
 
   clearUser(): void {
-    this.setUser(new User('', '', 0, 0, []));
+    this.setUser(new User('', '', 0, 0, [], ''));
     this.shiftsService.clearShifts();
     this.userChanged.next(this.user);
   }
