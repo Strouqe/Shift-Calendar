@@ -1,13 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, Subscription, catchError, retry, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, retry, take, throwError } from 'rxjs';
 import { MemeResponse } from '../models/memeResponse.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MemeService {
-  memeChanged = new Subject<string>();
+  memeChanged = new BehaviorSubject<string>('');
   private url: string;
   private meme: string;
 
@@ -16,13 +16,13 @@ export class MemeService {
     this.meme = '';
   }
 
-  fetchMems(): Subscription {
-    return this.http.get<MemeResponse>(this.url).pipe(retry(), catchError(this.handleError))
-    .subscribe((res) => {
+  fetchMems(): void {
+     this.http.get<MemeResponse>(this.url).pipe(retry(), catchError(this.handleError)).subscribe((res) => {
       this.meme = res.preview[0];
       this.memeChanged.next(this.meme);
       console.log('meme is loaded ============>', this.meme);
     });
+    // this.memeChanged.next((+new Date * Math.random()).toString(36).substring(0,6));
   }
 
   getMems(): string {

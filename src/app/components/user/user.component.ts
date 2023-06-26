@@ -16,6 +16,7 @@ export class UserComponent implements OnInit {
   changedUser = new Subject<User>();
   subscription: Subscription;
   memeSubscription: Subscription;
+  memeImageSubscription: Subscription;
   showInfo: boolean;
   user: User;
   totalWorkedHours: string;
@@ -34,11 +35,14 @@ export class UserComponent implements OnInit {
   ) {}
 
   handleRefreshImage(): void {
+    if(!this.memeImageSubscription){
+
+      this.memeImageSubscription = this.memeService.memeChanged.subscribe(
+        (url: string) => { this.imageUrl = url
+        }
+      );
+    }
     this.memeService.fetchMems();
-    this.memeSubscription.unsubscribe();
-    this.memeSubscription = this.memeService.memeChanged.subscribe(
-      (url: string) => (this.imageUrl = url)
-    );
   }
 
   ngOnInit(): void {
@@ -51,12 +55,16 @@ export class UserComponent implements OnInit {
     );
     this.memeService.fetchMems();
     this.memeSubscription = this.memeService.memeChanged.subscribe(
-      (url: string) => (this.memeUrl = url)
+      (url: string) => {
+        this.memeUrl = url;
+        console.log('memeUrl', this.memeUrl);
+      }
     );
 
     this.userService.autoSetUser();
     if (this.user) {
       if (this.user.imageUrl) {
+
         this.setImageUrl(this.user.imageUrl);
       }
       this.showInfo = true;
@@ -79,9 +87,7 @@ export class UserComponent implements OnInit {
       this.userForm.value.shiftDays,
       this.userForm.value.restDays,
       this.userForm.value.workingHours,
-      this.userForm.value.imageUrl
-        ? this.userForm.value.imageUrl
-        : this.memeUrl
+      this.userForm.value.imageUrl ? this.userForm.value.imageUrl : this.memeUrl
     );
     this.userService.saveUserInput(
       this.userForm.value.userName,
@@ -92,7 +98,9 @@ export class UserComponent implements OnInit {
       this.userForm.value.workingHours,
       this.userForm.value.imageUrl
     );
-    this.setImageUrl(this.userForm.value.imageUrl ? this.userForm.value.imageUrl : this.memeUrl);
+    this.setImageUrl(
+      this.userForm.value.imageUrl ? this.userForm.value.imageUrl : this.memeUrl
+    );
     this.showInfo = true;
     this.formatValues();
   }
