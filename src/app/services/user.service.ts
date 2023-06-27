@@ -28,7 +28,6 @@ export class UserService {
         this.memeChanged.next(this.memeUrl);
       }
     );
-    // this.memeService.fetchMems();
     if(!sessionStorage.getItem('userInput')){
       this.memeService.fetchMems();
     }
@@ -134,7 +133,6 @@ export class UserService {
       )
     );
     this.userChanged.next(this.user);
-    console.log(this.user);
   }
 
   getTotalWorkHours(workingHours: number, shiftDays: number): number {

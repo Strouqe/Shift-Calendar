@@ -49,7 +49,6 @@ export class UserComponent implements OnInit {
     this.memeImageSubscription = this.userService.memeChanged.subscribe(
       (url: string) => {
         this.imageUrl = url;
-        console.log("meme changed user component =====>", this.imageUrl);
       }
     );
     this.userService.autoSetUser();

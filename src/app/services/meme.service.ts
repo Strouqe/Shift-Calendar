@@ -21,7 +21,6 @@ export class MemeService {
      this.http.get<ResponseData>(this.url).pipe(retry(), catchError(this.handleError)).subscribe((res) => {
       this.meme = res.data.memes[Math.floor(Math.random() * 101)].url;
       this.memeChanged.next(this.meme);
-      console.log('meme is loaded ============>', this.meme);
     });
   }
 

@@ -19,7 +19,7 @@ export class PieChartComponent {
         this.userService.getUser().totalFreeHours,
       ],
       chart: {
-        width: 390,
+        width: 570,
         type: 'pie',
       },
       labels: ['Total work hours', 'Total free hours'],
