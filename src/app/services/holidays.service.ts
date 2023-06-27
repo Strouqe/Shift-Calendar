@@ -31,7 +31,7 @@ export class HolidaysService {
       this.setHolidays(this.fetchYearHollidays);
       this.setHolidays(this.nextYearHoliday);
       console.log(this.holidays);
-    }, 1500);
+    }, 2000);
   }
 
   fetchNextYearHolidays(url: string): Subscription {

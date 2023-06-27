@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { Shift } from '../models/shift.model';
 import { User, UserInput } from '../models/user.model';
@@ -8,7 +8,7 @@ import { ShiftService } from './shift.service';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService implements OnInit {
+export class UserService {
   userChanged = new Subject<User>();
   memeChanged = new Subject<string>();
   shiftsSubscription: Subscription;
@@ -22,17 +22,18 @@ export class UserService implements OnInit {
     private memeService: MemeService,
   ) {
     this.memeUrl = "";
-    if (sessionStorage.getItem('userInput') && !this.memeUrl) {
-      this.memeUrl = this.getUserInput().imgUrl;
-    }
     this.memsSubscription = this.memeService.memeChanged.subscribe(
       (url: string) => {
         this.memeUrl = url;
         this.memeChanged.next(this.memeUrl);
       }
     );
+    // this.memeService.fetchMems();
     if(!sessionStorage.getItem('userInput')){
       this.memeService.fetchMems();
+    }
+    if (sessionStorage.getItem('userInput') && !this.memeUrl) {
+      this.memeUrl = this.getUserInput().imgUrl;
     }
     this.shiftsSubscription = this.shiftsService.shiftsChanged.subscribe(
       (shifts: Shift[]) => {
@@ -42,7 +43,6 @@ export class UserService implements OnInit {
     this.shifts = this.shiftsService.getShifts();
   }
 
-  ngOnInit(): void {}
 
   handleRefreshImage(): void {
     this.memeService.fetchMems();
