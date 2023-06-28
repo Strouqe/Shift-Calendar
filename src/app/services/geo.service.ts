@@ -36,8 +36,7 @@ export class GeoService {
             // TODO: this whole code is just unreadable, eliminate nesting. For ex: this.userCountry = value.address_components[value.address_components.length - 1].short_name;
             if (response.status === 'OK' && response.results?.length) {
               const value = response.results[0];
-              this.userCountry =
-                value.address_components[value.address_components.length - 1].short_name;
+              this.userCountry = value.address_components[value.address_components.length - 1].short_name;
 
                 console.log(this.userCountry);
 
