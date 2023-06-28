@@ -1,4 +1,4 @@
-export class MemeResponse {
+class MemeResponse {
   constructor(
     public box_count: number,
     public captions: number,

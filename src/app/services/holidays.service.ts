@@ -27,7 +27,7 @@ export class HolidaysService {
 
   fetchAllHolidays(userCountry: string): void {
     let url: string =
-      'https://calendarific.com/api/v2/holidays?api_key=30bd35becec0c63d9b71453ffccaa74dc214c934&country=' +
+      'https://calendarific.com/api/v2/holidays?api_key=4c38e5dd57736f91148c49bc431e4f2ff9bdfaa7&country=' +
       userCountry;
     this.fetchHolidays(url);
     this.fetchNextYearHolidays(url); // TODO: fetchHolidays, fetchNextYearHolidays should be observables that returns arrays of holidays. It should be awaited with Promise.all in parallel, or by rxjs merge

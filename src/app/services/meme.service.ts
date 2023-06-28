@@ -1,24 +1,25 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, retry, throwError } from 'rxjs';
-import { MemeResponse, ResponseData } from '../models/memeResponse.model';
+import { Observable, ReplaySubject, catchError, retry, throwError } from 'rxjs';
+import { ResponseData } from '../models/memeResponse.model';
+
+
+const MEME_URI: string = 'https://api.imgflip.com/get_memes';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MemeService {
-  memeChanged = new BehaviorSubject<string>(''); // TODO: should be replay subject
-  private url: string;
+  memeChanged = new ReplaySubject<string>();
 
   private meme: string;
 
   constructor(private http: HttpClient) {
-    this.url = 'https://api.imgflip.com/get_memes'; // TODO: should be a constant on the top of the file MEME_URI = ;
     this.meme = '';
   }
 
   fetchMems(): void {
-     this.http.get<ResponseData>(this.url).pipe(retry(), catchError(this.handleError)).subscribe((res) => {
+     this.http.get<ResponseData>(MEME_URI).pipe(retry(), catchError(this.handleError)).subscribe((res) => {
       this.meme = res.data.memes[Math.floor(Math.random() * 101)].url;
       this.memeChanged.next(this.meme);
     });
@@ -38,8 +39,6 @@ export class MemeService {
       );
     }
     // TODO: what's the point of handling an error to return an error and break the logic of the app? You don't need that kind of a error processing. If you need to log error, you can write HoF as observable and write to console an error
-    return throwError(
-      () => new Error('Something bad happened; please try again later.')
-    );
+    return throwError(error);
   }
 }
