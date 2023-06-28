@@ -23,6 +23,7 @@
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Gender</mat-label>
+            <!-- TODO: swap select to mat-select component -->
             <select matNativeControl formControlName="gender">
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -77,11 +78,13 @@
     </button>
   </mat-card>
 </form>
+<!-- TODO: need to use routing module and present 2 global views: 1 with form, another with recalculating. Or use different components atleast. Too much logic inside of one component -->
 <div class="user-info__container" *ngIf="showInfo">
   <mat-card class="user-info">
     <mat-tab-group dynamicHeight class="user-info__tabs">
       <mat-tab label="User Info" class="user-info__tab">
         <div class="user-info__tab">
+          <!-- TODO: mat-card with class img looks wrong -->
           <mat-card class="img">
             <img src="{{ imageUrl }}" alt="1" class="img" />
             <button
@@ -110,10 +113,12 @@
       ></mat-tab>
       <mat-tab label="Chart">
         <mat-card class="user-info__tab--chart">
+          <!-- TODO: useless ngIf, one at the top is the same - remove -->
           <app-pie-chart *ngIf="showInfo"></app-pie-chart>
         </mat-card>
       </mat-tab>
     </mat-tab-group>
+    <!-- TODO: div with class button looks wrong -->
     <div class="button">
       <button
         type="button"

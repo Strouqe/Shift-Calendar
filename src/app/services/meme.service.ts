@@ -7,13 +7,13 @@ import { MemeResponse, ResponseData } from '../models/memeResponse.model';
   providedIn: 'root',
 })
 export class MemeService {
-  memeChanged = new BehaviorSubject<string>('');
+  memeChanged = new BehaviorSubject<string>(''); // TODO: should be replay subject
   private url: string;
 
   private meme: string;
 
   constructor(private http: HttpClient) {
-    this.url = 'https://api.imgflip.com/get_memes';
+    this.url = 'https://api.imgflip.com/get_memes'; // TODO: should be a constant on the top of the file MEME_URI = ;
     this.meme = '';
   }
 
@@ -37,6 +37,7 @@ export class MemeService {
         error.error
       );
     }
+    // TODO: what's the point of handling an error to return an error and break the logic of the app? You don't need that kind of a error processing. If you need to log error, you can write HoF as observable and write to console an error
     return throwError(
       () => new Error('Something bad happened; please try again later.')
     );
