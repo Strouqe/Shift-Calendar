@@ -4,7 +4,6 @@ import { Subject, Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { User } from '../../models/user.model';
 import { GeoService } from '../../services/geo.service';
-import { MemeService } from '../../services/meme.service';
 import { ShiftService } from '../../services/shift.service';
 
 @Component({
@@ -14,7 +13,10 @@ import { ShiftService } from '../../services/shift.service';
 })
 export class UserComponent implements OnInit {
   changedUser = new Subject<User>();
+  changedMeme = new Subject<string>();
   subscription: Subscription;
+
+  memeImageSubscription: Subscription;
   showInfo: boolean;
   user: User;
   totalWorkedHours: string;
@@ -22,29 +24,45 @@ export class UserComponent implements OnInit {
   totalRest: string;
   startDate: Date;
   userForm: FormGroup;
+  imageUrl: string;
+  memeUrl: string;
 
   constructor(
     private userService: UserService,
-    private memeService: MemeService,
     private geoService: GeoService,
-    private shiftService: ShiftService,
+    private shiftService: ShiftService
   ) {}
+
+  handleRefreshImage(): void {
+    this.userService.handleRefreshImage();
+  }
 
   ngOnInit(): void {
     this.startDate = new Date();
     this.showInfo = false;
     this.geoService.getCurrentLocation();
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe(
-      (user: User) => this.user = user
+    this.subscription = this.userService.userChanged.subscribe((user: User) => {
+      this.user = user;
+      this.imageUrl = user.imageUrl!;
+    });
+    this.memeImageSubscription = this.userService.memeChanged.subscribe(
+      (url: string) => {
+        this.imageUrl = url;
+      }
     );
     this.userService.autoSetUser();
     if (this.user) {
+      this.setImageUrl(this.user.imageUrl!);
       this.showInfo = true;
     }
     if (this.user) {
       this.formatValues();
     }
+  }
+
+  setImageUrl(url: string): void {
+    this.imageUrl = url;
   }
 
   onSubmit(): void {
@@ -56,9 +74,7 @@ export class UserComponent implements OnInit {
       this.userForm.value.shiftDays,
       this.userForm.value.restDays,
       this.userForm.value.workingHours,
-      this.userForm.value.imageUrl
-        ? this.userForm.value.imageUrl
-        : this.memeService.getMems()
+      this.userForm.value.imageUrl ? this.userForm.value.imageUrl : this.memeUrl
     );
     this.userService.saveUserInput(
       this.userForm.value.userName,
@@ -68,6 +84,11 @@ export class UserComponent implements OnInit {
       this.userForm.value.restDays,
       this.userForm.value.workingHours,
       this.userForm.value.imageUrl
+    );
+    this.setImageUrl(
+      this.userForm.value.imageUrl
+        ? this.userForm.value.imageUrl
+        : this.userService.memeUrl
     );
     this.showInfo = true;
     this.formatValues();
@@ -102,8 +123,6 @@ export class UserComponent implements OnInit {
     this.userService.clearUser();
     this.showInfo = false;
     this.userService.deleteUser();
-    this.memeService.fetchMems();
-    this.memeService.getMems();
   }
 
   private initForm(): void {

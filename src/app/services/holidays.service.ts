@@ -13,7 +13,9 @@ export class HolidaysService {
   private nextYearHoliday: Holiday[];
   private holidays: Holiday[];
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+  ) {
     this.fetchYear = new Date().getFullYear();
     this.fetchYearHollidays = [];
     this.nextYearHoliday = [];
@@ -30,7 +32,7 @@ export class HolidaysService {
     setTimeout(() => {
       this.setHolidays(this.fetchYearHollidays);
       this.setHolidays(this.nextYearHoliday);
-    }, 1000);
+    }, 2000);
   }
 
   fetchNextYearHolidays(url: string): Subscription {
@@ -52,6 +54,4 @@ export class HolidaysService {
   getHolidays(): Holiday[] {
     return this.holidays.slice();
   }
-
-
 }

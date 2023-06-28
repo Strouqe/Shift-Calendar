@@ -1,25 +1,26 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, Subscription, catchError, retry, throwError } from 'rxjs';
-import { MemeResponse } from '../models/memeResponse.model';
+import { BehaviorSubject, Observable, catchError, retry, throwError } from 'rxjs';
+import { MemeResponse, ResponseData } from '../models/memeResponse.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MemeService {
-  memeChanged = new Subject<string>();
+  memeChanged = new BehaviorSubject<string>('');
   private url: string;
+
   private meme: string;
 
   constructor(private http: HttpClient) {
-    this.url = 'https://meme-api.com/gimme';
+    this.url = 'https://api.imgflip.com/get_memes';
+    this.meme = '';
   }
 
-  fetchMems(): Subscription {
-    return this.http.get<MemeResponse>(this.url).pipe(retry(), catchError(this.handleError)).subscribe((res) => {
-      this.meme = res.preview[0];
+  fetchMems(): void {
+     this.http.get<ResponseData>(this.url).pipe(retry(), catchError(this.handleError)).subscribe((res) => {
+      this.meme = res.data.memes[Math.floor(Math.random() * 101)].url;
       this.memeChanged.next(this.meme);
-      console.log('meme is loaded ============>', this.meme);
     });
   }
 

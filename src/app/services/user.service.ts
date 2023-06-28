@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { Shift } from '../models/shift.model';
 import { User, UserInput } from '../models/user.model';
@@ -8,26 +8,43 @@ import { ShiftService } from './shift.service';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService implements OnInit {
+export class UserService {
   userChanged = new Subject<User>();
-  subscription: Subscription;
+  memeChanged = new Subject<string>();
+  shiftsSubscription: Subscription;
+  memsSubscription: Subscription;
   shifts: Shift[];
+  memeUrl: string;
   private user: User;
 
   constructor(
     private shiftsService: ShiftService,
     private memeService: MemeService,
   ) {
-    this.memeService.fetchMems();
-  }
-
-  ngOnInit(): void {
-    this.subscription = this.shiftsService.shiftsChanged.subscribe(
+    this.memeUrl = "";
+    this.memsSubscription = this.memeService.memeChanged.subscribe(
+      (url: string) => {
+        this.memeUrl = url;
+        this.memeChanged.next(this.memeUrl);
+      }
+    );
+    if(!sessionStorage.getItem('userInput')){
+      this.memeService.fetchMems();
+    }
+    if (sessionStorage.getItem('userInput') && !this.memeUrl) {
+      this.memeUrl = this.getUserInput().imgUrl;
+    }
+    this.shiftsSubscription = this.shiftsService.shiftsChanged.subscribe(
       (shifts: Shift[]) => {
         this.shifts = shifts;
       }
     );
     this.shifts = this.shiftsService.getShifts();
+  }
+
+
+  handleRefreshImage(): void {
+    this.memeService.fetchMems();
   }
 
   autoSetUser(): void {
@@ -112,17 +129,17 @@ export class UserService implements OnInit {
         this.getTotalWorkHours(workingHours, shiftDays),
         this.getTotalFreeTime(restDays, workingHours, shiftDays),
         this.shiftsService.getShifts(),
-        imageUrl
+        imageUrl ? imageUrl : this.memeUrl
       )
     );
     this.userChanged.next(this.user);
   }
 
-  getTotalWorkHours(workingHours: number, shiftDays: number) {
+  getTotalWorkHours(workingHours: number, shiftDays: number): number {
     return workingHours * shiftDays * this.shiftsService.getShifts().length;
   }
 
-  getTotalFreeTime(restDays: number, workingHours: number, shiftDays: number) {
+  getTotalFreeTime(restDays: number, workingHours: number, shiftDays: number): number {
     let betweenWork =
       (24 - workingHours) * shiftDays * this.shiftsService.getShifts().length;
     let totalRestDays = restDays * (this.shiftsService.getShifts().length - 1);
@@ -130,7 +147,7 @@ export class UserService implements OnInit {
   }
 
   clearUser(): void {
-    this.setUser(new User('', '', 0, 0, []));
+    this.setUser(new User('', '', 0, 0, [], ''));
     this.shiftsService.clearShifts();
     this.userChanged.next(this.user);
   }
