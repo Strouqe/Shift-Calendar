@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
@@ -11,7 +11,7 @@ import { ShiftService } from '../../services/shift.service';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
 })
-export class UserComponent implements OnInit { // TODO: check visibility modifiers and put appropriate ones on properties and methods
+export class UserComponent implements OnInit, OnDestroy { // TODO: check visibility modifiers and put appropriate ones on properties and methods
   changedUser = new Subject<User>();
   changedMeme = new Subject<string>();
   subscription: Subscription;
@@ -33,20 +33,16 @@ export class UserComponent implements OnInit { // TODO: check visibility modifie
     private shiftService: ShiftService
   ) {}
 
-  handleRefreshImage(): void {
-    this.userService.handleRefreshImage();
-  }
-
-  ngOnInit(): void { // TODO: lifecycle hooks should be at the top. Before functions but after constructor
+  ngOnInit(): void {
     this.startDate = new Date();
     this.showInfo = false;
     this.geoService.getCurrentLocation();
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe((user: User) => { // TODO: why do you declaring subscriptions but not clearing them?
+    this.subscription = this.userService.userChanged.subscribe((user: User) => {
       this.user = user;
       this.imageUrl = user.imageUrl!;
     });
-    this.memeImageSubscription = this.userService.memeChanged.subscribe( // TODO: why do you declaring subscriptions but not clearing them?
+    this.memeImageSubscription = this.userService.memeChanged.subscribe(
       (url: string) => {
         this.imageUrl = url;
       }
@@ -59,6 +55,10 @@ export class UserComponent implements OnInit { // TODO: check visibility modifie
     if (this.user) {
       this.formatValues();
     }
+  }
+
+  handleRefreshImage(): void {
+    this.userService.handleRefreshImage();
   }
 
   setImageUrl(url: string): void {
@@ -135,5 +135,10 @@ export class UserComponent implements OnInit { // TODO: check visibility modifie
       restDays: new FormControl(null, Validators.required),
       workingHours: new FormControl(null, Validators.required),
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.memeImageSubscription.unsubscribe();
   }
 }

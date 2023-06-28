@@ -15,10 +15,6 @@
 img {
   max-height: 320px;
 }
-.img{
-  margin: 0 auto;
-  max-width: 250px;
-}
 
 .form {
   display: flex;
@@ -67,9 +63,12 @@ img {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    width: 100%; // TODO: useless
     height: 440px;
-    padding: auto; // TODO: no such thing as padding: auto - remove it
+
+    &__img-container{
+      margin: 0 auto;
+      max-width: 250px;
+    }
 
     &--chart {
       display: flex;

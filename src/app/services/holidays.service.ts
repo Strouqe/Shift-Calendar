@@ -13,9 +13,7 @@ export class HolidaysService {
   private nextYearHoliday: Holiday[];
   private holidays: Holiday[];
 
-  constructor(
-    private http: HttpClient,
-  ) {
+  constructor(private http: HttpClient) {
     this.fetchYear = new Date().getFullYear();
     this.fetchYearHollidays = [];
     this.nextYearHoliday = [];
@@ -27,13 +25,17 @@ export class HolidaysService {
     this.holidays = [...this.holidays, ...holidays];
   }
 
-  fetchAllHolidays(url: string): void {
+  fetchAllHolidays(userCountry: string): void {
+    let url: string =
+      'https://calendarific.com/api/v2/holidays?api_key=30bd35becec0c63d9b71453ffccaa74dc214c934&country=' +
+      userCountry;
     this.fetchHolidays(url);
     this.fetchNextYearHolidays(url); // TODO: fetchHolidays, fetchNextYearHolidays should be observables that returns arrays of holidays. It should be awaited with Promise.all in parallel, or by rxjs merge
-    setTimeout(() => { // TODO: setTimeout should be eliminated. You shouldn't rely on time whatever the circumstances are
+    setTimeout(() => {
+      // TODO: setTimeout should be eliminated. You shouldn't rely on time whatever the circumstances are
       this.setHolidays(this.fetchYearHollidays); // TODO: this.holidays = [...this.fetchYearHollidays, ...this.nextYearHoliday]; that's the line that you can do with your code
       this.setHolidays(this.nextYearHoliday);
-    }, 2000);
+    }, 3000);
   }
 
   fetchNextYearHolidays(url: string): Subscription {
@@ -53,6 +55,6 @@ export class HolidaysService {
   }
 
   getHolidays(): Holiday[] {
-    return this.holidays.slice(); // TODO: what's the point of slice? Holidays don't change, you can mutate property if you need to. Just return an array
+    return this.holidays.slice();
   }
 }

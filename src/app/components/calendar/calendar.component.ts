@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 import compareAsc from 'date-fns/compareAsc';
@@ -6,10 +6,8 @@ import { Subscription } from 'rxjs';
 
 import { formatISO } from 'date-fns';
 import { Shift } from '../../models/shift.model';
-import { User } from '../../models/user.model';
 import { HolidaysService } from '../../services/holidays.service';
 import { ShiftService } from '../../services/shift.service';
-import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-calendar',
@@ -17,7 +15,7 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./calendar.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class CalendarComponent implements OnInit, OnDestroy {
+export class CalendarComponent implements OnInit {
   shifts: Shift[];
   subscription: Subscription;
   startDate = new Date();
@@ -26,20 +24,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   constructor(
     private shiftsService: ShiftService,
-    private userService: UserService,
     private holidayService: HolidaysService
   ) {}
 
   ngOnInit(): void {
     this.showCalendar = false;
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe(
-      (user: User) => (this.shifts = user.shifts) // TODO: getting shifts from user, but also getting from shift service. Should be one or another
-    );
     this.shifts = this.shiftsService.getShifts();
-  }
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
   toggleCalendar(): void {

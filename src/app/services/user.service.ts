@@ -34,14 +34,8 @@ export class UserService { // TODO: all services are tight coupled
     if (sessionStorage.getItem('userInput') && !this.memeUrl) {
       this.memeUrl = this.getUserInput().imgUrl;
     }
-    this.shiftsSubscription = this.shiftsService.shiftsChanged.subscribe(
-      (shifts: Shift[]) => {
-        this.shifts = shifts; // TODO: you have subscription for shifts, but few lines after you getting shifts by getShifts, should be one or another not both
-      }
-    );
     this.shifts = this.shiftsService.getShifts();
   }
-
 
   handleRefreshImage(): void {
     this.memeService.fetchMems();
@@ -59,9 +53,7 @@ export class UserService { // TODO: all services are tight coupled
         userInput.workingHours,
         userInput.imgUrl
       );
-    } else {
-      return; // TODO: useless code
-    }
+    };
   }
 
   saveUserInput(

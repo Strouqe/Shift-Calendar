@@ -84,8 +84,7 @@
     <mat-tab-group dynamicHeight class="user-info__tabs">
       <mat-tab label="User Info" class="user-info__tab">
         <div class="user-info__tab">
-          <!-- TODO: mat-card with class img looks wrong -->
-          <mat-card class="img">
+          <mat-card class="user-info__tab__img-container">
             <img src="{{ imageUrl }}" alt="1" class="img" />
             <button
               type="button"
@@ -113,8 +112,7 @@
       ></mat-tab>
       <mat-tab label="Chart">
         <mat-card class="user-info__tab--chart">
-          <!-- TODO: useless ngIf, one at the top is the same - remove -->
-          <app-pie-chart *ngIf="showInfo"></app-pie-chart>
+          <app-pie-chart></app-pie-chart>
         </mat-card>
       </mat-tab>
     </mat-tab-group>

@@ -37,15 +37,11 @@ export class GeoService {
             if (response.status === 'OK' && response.results?.length) {
               const value = response.results[0];
               this.userCountry =
-                value.address_components[
-                  value.address_components.length - 1
-                ].short_name;
+                value.address_components[value.address_components.length - 1].short_name;
 
                 console.log(this.userCountry);
-              let url: string =
-                'https://calendarific.com/api/v2/holidays?api_key=30bd35becec0c63d9b71453ffccaa74dc214c934&country=' +
-                this.userCountry; // TODO: api url should be in the holidays service
-              this.holidayService.fetchAllHolidays(url);
+
+              this.holidayService.fetchAllHolidays(this.userCountry);
             } else {
               console.error(response.error_message, response.status);
             }
