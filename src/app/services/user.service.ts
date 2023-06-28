@@ -8,9 +8,9 @@ import { ShiftService } from './shift.service';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class UserService { // TODO: all services are tight coupled
   userChanged = new Subject<User>();
-  memeChanged = new Subject<string>();
+  memeChanged = new Subject<string>(); // TODO: why UserService has memeChanged subject inside? It doesn't belong here
   shiftsSubscription: Subscription;
   memsSubscription: Subscription;
   shifts: Shift[];
@@ -36,7 +36,7 @@ export class UserService {
     }
     this.shiftsSubscription = this.shiftsService.shiftsChanged.subscribe(
       (shifts: Shift[]) => {
-        this.shifts = shifts;
+        this.shifts = shifts; // TODO: you have subscription for shifts, but few lines after you getting shifts by getShifts, should be one or another not both
       }
     );
     this.shifts = this.shiftsService.getShifts();
@@ -60,7 +60,7 @@ export class UserService {
         userInput.imgUrl
       );
     } else {
-      return;
+      return; // TODO: useless code
     }
   }
 
@@ -76,7 +76,7 @@ export class UserService {
     if (!imgUrl) {
       imgUrl = this.memeService.getMems();
     }
-    sessionStorage.setItem(
+    sessionStorage.setItem( // TODO: service for sessionStorage could be created to manipulate the storage
       'userInput',
       JSON.stringify({
         name,
@@ -123,7 +123,7 @@ export class UserService {
       workingHours
     );
     this.setUser(
-      new User(
+      new User( // TODO: you can create User.fromData static method to initialize a user inside a fat model. It will remove unnecessary code in service
         name,
         gender,
         this.getTotalWorkHours(workingHours, shiftDays),
@@ -147,7 +147,7 @@ export class UserService {
   }
 
   clearUser(): void {
-    this.setUser(new User('', '', 0, 0, [], ''));
+    this.setUser(new User('', '', 0, 0, [], '')); // TODO: User.empty static method could be used
     this.shiftsService.clearShifts();
     this.userChanged.next(this.user);
   }

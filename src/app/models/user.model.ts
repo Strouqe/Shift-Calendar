@@ -1,6 +1,6 @@
 import { Shift } from './shift.model';
 
-export class User {
+export class User { // TODO: https://stackoverflow.com/questions/41923069/assigning-typescript-constructor-parameters unnecessary code duplication while writing a model
   public name: string;
   public gender: string;
   public totalWorkHours: number;

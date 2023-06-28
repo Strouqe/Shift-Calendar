@@ -6,7 +6,7 @@ import { HolidaysService } from './holidays.service';
   providedIn: 'root',
 })
 export class GeoService {
-  userCountry: string | undefined;
+  userCountry: string | undefined; // TODO: you have declared setter & getter but haven't made the property private
   private geolocationWorking = false;
   private geocoderWorking = false;
   constructor(private holidayService: HolidaysService) {}
@@ -33,6 +33,7 @@ export class GeoService {
         this.geocoderWorking = true;
         this.geocodeLatLng(point)
           .then((response: GeocoderResponse) => {
+            // TODO: this whole code is just unreadable, eliminate nesting. For ex: this.userCountry = value.address_components[value.address_components.length - 1].short_name;
             if (response.status === 'OK' && response.results?.length) {
               const value = response.results[0];
               this.userCountry =
@@ -43,7 +44,7 @@ export class GeoService {
                 console.log(this.userCountry);
               let url: string =
                 'https://calendarific.com/api/v2/holidays?api_key=30bd35becec0c63d9b71453ffccaa74dc214c934&country=' +
-                this.userCountry;
+                this.userCountry; // TODO: api url should be in the holidays service
               this.holidayService.fetchAllHolidays(url);
             } else {
               console.error(response.error_message, response.status);

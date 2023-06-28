@@ -9,7 +9,7 @@ import { Holiday } from '../models/holiday.model';
 @Injectable({
   providedIn: 'root',
 })
-export class ShiftService {
+export class ShiftService { // TODO: a lot of methods, but most of them unused
   shiftsChanged = new Subject<Shift[]>();
   private shifts: Shift[];
 
@@ -72,9 +72,9 @@ export class ShiftService {
       this.createShift(newStartDate, shiftDays, restDays, workingHours);
     } else if (
       compareAsc(add(this.shifts[0].startDate, { years: 1 }), endDate) !== 1 &&
-      this.shifts.length > 0
+      this.shifts.length > 0 // TODO: again don't nest if's and stuff. Write them in one line, if a line starts to be large, move it to function that'll return boolean
     ) {
-      return;
+      return; // TODO: immediate return should be at the top of code block
     } else {
       this.shifts.push(shift);
       this.setShifts(this.shifts);

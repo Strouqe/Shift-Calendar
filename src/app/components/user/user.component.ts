@@ -11,7 +11,7 @@ import { ShiftService } from '../../services/shift.service';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit { // TODO: check visibility modifiers and put appropriate ones on properties and methods
   changedUser = new Subject<User>();
   changedMeme = new Subject<string>();
   subscription: Subscription;
@@ -37,16 +37,16 @@ export class UserComponent implements OnInit {
     this.userService.handleRefreshImage();
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void { // TODO: lifecycle hooks should be at the top. Before functions but after constructor
     this.startDate = new Date();
     this.showInfo = false;
     this.geoService.getCurrentLocation();
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe((user: User) => {
+    this.subscription = this.userService.userChanged.subscribe((user: User) => { // TODO: why do you declaring subscriptions but not clearing them?
       this.user = user;
       this.imageUrl = user.imageUrl!;
     });
-    this.memeImageSubscription = this.userService.memeChanged.subscribe(
+    this.memeImageSubscription = this.userService.memeChanged.subscribe( // TODO: why do you declaring subscriptions but not clearing them?
       (url: string) => {
         this.imageUrl = url;
       }

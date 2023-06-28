@@ -1,5 +1,5 @@
 export class Holiday {
-  public canonical_url: string;
+  public canonical_url: string; // TODO: in javascript, typescript camelCase if preferred way to declare variables, properties and stuff
   public country: {
     id: string;
     name: string;

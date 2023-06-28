@@ -1,3 +1,8 @@
+// TODO: every selector has some sort of width, height. You should avoid using absolute values. Add to container max width, max height, width, height and everything else should be flexible without additional percents and values.
+// TODO: In real applications it would be unacceptable and would have consequences in terms of reliability and maintenance
+
+// TODO: half of the flex styles, margin: auto has no affect on the markup. You should go through them and have a thought why do u need them or just check within the browser console by turning them off and on
+
 .button {
   position: absolute;
   top: 490px;
@@ -26,7 +31,7 @@ img {
 
   &__fields {
     display: flex;
-    flex-direction: row;
+    flex-direction: row; // TODO: display: flex gives flex-direction: row by default; remove it
     padding: 15px;
 
     div {
@@ -62,9 +67,9 @@ img {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    width: 100%;
+    width: 100%; // TODO: useless
     height: 440px;
-    padding: auto;
+    padding: auto; // TODO: no such thing as padding: auto - remove it
 
     &--chart {
       display: flex;

@@ -34,7 +34,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.showCalendar = false;
     this.initForm();
     this.subscription = this.userService.userChanged.subscribe(
-      (user: User) => (this.shifts = user.shifts)
+      (user: User) => (this.shifts = user.shifts) // TODO: getting shifts from user, but also getting from shift service. Should be one or another
     );
     this.shifts = this.shiftsService.getShifts();
   }

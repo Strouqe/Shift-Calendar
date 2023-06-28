@@ -19,7 +19,8 @@ export class HolidaysService {
     this.fetchYear = new Date().getFullYear();
     this.fetchYearHollidays = [];
     this.nextYearHoliday = [];
-    this.holidays = [...this.fetchYearHollidays, ...this.nextYearHoliday];
+    this.holidays = [...this.fetchYearHollidays, ...this.nextYearHoliday]; // TODO: just set empty array, what's the point of this?
+    // TODO: fetching of holidays should be done in constructor or by component init. There's no need to call it after geo service
   }
 
   setHolidays(holidays: Holiday[]): void {
@@ -28,9 +29,9 @@ export class HolidaysService {
 
   fetchAllHolidays(url: string): void {
     this.fetchHolidays(url);
-    this.fetchNextYearHolidays(url);
-    setTimeout(() => {
-      this.setHolidays(this.fetchYearHollidays);
+    this.fetchNextYearHolidays(url); // TODO: fetchHolidays, fetchNextYearHolidays should be observables that returns arrays of holidays. It should be awaited with Promise.all in parallel, or by rxjs merge
+    setTimeout(() => { // TODO: setTimeout should be eliminated. You shouldn't rely on time whatever the circumstances are
+      this.setHolidays(this.fetchYearHollidays); // TODO: this.holidays = [...this.fetchYearHollidays, ...this.nextYearHoliday]; that's the line that you can do with your code
       this.setHolidays(this.nextYearHoliday);
     }, 2000);
   }
@@ -45,13 +46,13 @@ export class HolidaysService {
 
   fetchHolidays(url: string): Subscription {
     return this.http
-      .get<HolidayResponse>(url + '&year=' + this.fetchYear)
+      .get<HolidayResponse>(url + '&year=' + this.fetchYear) // TODO; subscriptions should be eliminated, it's not a reactive way of handling things
       .subscribe((res) => {
         this.fetchYearHollidays = res.response.holidays;
       });
   }
 
   getHolidays(): Holiday[] {
-    return this.holidays.slice();
+    return this.holidays.slice(); // TODO: what's the point of slice? Holidays don't change, you can mutate property if you need to. Just return an array
   }
 }
