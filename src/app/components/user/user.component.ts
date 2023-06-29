@@ -38,23 +38,24 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
     this.showInfo = false;
     this.geoService.getCurrentLocation();
     this.initForm();
-    this.subscription = this.userService.userChanged.subscribe((user: User) => {
-      this.user = user;
-      this.imageUrl = user.imageUrl!;
-    });
+    // this.subscription = this.userService.userChanged.subscribe((user: User) => {
+    //   this.user = user;
+    //   this.imageUrl = user.imageUrl!;
+    //   console.log("user component user ====>", this.user)
+    // });
     this.memeImageSubscription = this.userService.memeChanged.subscribe(
       (url: string) => {
         this.imageUrl = url;
       }
     );
-    this.userService.autoSetUser();
+    // this.userService.autoSetUser();
     if (this.user) {
-      this.setImageUrl(this.user.imageUrl!);
+      // this.setImageUrl(this.user.imageUrl!);
       this.showInfo = true;
     }
-    if (this.user) {
-      this.formatValues();
-    }
+    // if (this.user) {
+    //   this.formatValues();
+    // }
   }
 
   handleRefreshImage(): void {
@@ -91,7 +92,7 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
         : this.userService.memeUrl
     );
     this.showInfo = true;
-    this.formatValues();
+    // this.formatValues();
   }
 
   splitTime(totalHours: number): string {
@@ -102,21 +103,21 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
     return `${days} days, ${hours} hours, ${minuets} minuets`;
   }
 
-  formatValues(): void {
-    if (this.user) {
-      this.totalWorkedHours = this.user.totalWorkHours.toString();
-      this.totalOffDays = (
-        +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24 +
-        this.shiftService.sumHolidays()
-      ).toString();
-      this.totalRest = (
-        this.user.totalFreeHours +
-        this.shiftService.sumHolidays() * 24 -
-        (24 - this.user.shifts[0].workingHours) *
-          this.shiftService.sumHolidays()
-      ).toString();
-    }
-  }
+  // formatValues(): void {
+  //   if (this.user) {
+  //     this.totalWorkedHours = this.user.totalWorkHours.toString();
+  //     this.totalOffDays = (
+  //       +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24 +
+  //       this.shiftService.sumHolidays()
+  //     ).toString();
+  //     this.totalRest = (
+  //       this.user.totalFreeHours +
+  //       this.shiftService.sumHolidays() * 24 -
+  //       (24 - this.user.shifts[0].workingHours) *
+  //         this.shiftService.sumHolidays()
+  //     ).toString();
+  //   }
+  // }
 
   onReset(): void {
     this.userForm.reset();

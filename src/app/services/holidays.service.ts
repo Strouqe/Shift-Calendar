@@ -9,14 +9,10 @@ import { Observable } from 'rxjs';
 })
 export class HolidaysService {
   fetchYear: number;
-  private fetchYearHollidays: Holiday[];
-  private nextYearHoliday: Holiday[];
   private holidays: Holiday[];
 
   constructor(private http: HttpClient) {
     this.fetchYear = new Date().getFullYear();
-    this.fetchYearHollidays = [];
-    this.nextYearHoliday = [];
     this.holidays = [];
     // TODO: just set empty array, what's the point of this?
     // TODO: fetching of holidays should be done in constructor or by component init. There's no need to call it after geo service
@@ -44,6 +40,6 @@ export class HolidaysService {
 
 
   getHolidays(): Holiday[] {
-    return this.holidays.slice();
+    return this.holidays;
   }
 }

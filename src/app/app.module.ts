@@ -21,6 +21,7 @@ import { CommonModule } from '@angular/common';
 import { UserComponent } from './components/user/user.component';
 
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
+import { UserInfoComponent } from './components/user-info/user-info.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { PieChartComponent } from './components/pie-chart/pie-chart.component';
     CalendarComponent,
     UserComponent,
     PieChartComponent,
+    UserInfoComponent,
   ],
   imports: [
     BrowserModule,

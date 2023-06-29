@@ -1,0 +1,31 @@
+.user-info {
+  max-width: 750px;
+  max-height: 560px;
+
+  margin: auto;
+
+  &__tabs{
+    &__tab{
+
+      &--details{
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 40px;
+
+        &__img-container{
+          margin: 0 auto;
+          max-width: 250px;
+        }
+
+        &__totals{
+          margin: 0 auto;
+        }
+      }
+
+      &--calendar{
+        padding: 40px;
+      }
+    };
+  }
+}
