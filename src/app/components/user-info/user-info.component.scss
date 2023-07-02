@@ -1,4 +1,11 @@
+.container {
+  display: flex;
+  align-content: center;
+  height: 100vh;
+}
+
 .user-info {
+  width: 60%;
   max-width: 750px;
   max-height: 560px;
 
@@ -24,6 +31,10 @@
       }
 
       &--calendar{
+        padding: 40px;
+      }
+
+      &--chart{
         padding: 40px;
       }
     };

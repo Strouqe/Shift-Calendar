@@ -1,3 +1,4 @@
+<div class="container">
 <mat-card class="user-info">
   <mat-tab-group dynamicHeight class="user-info__tabs">
     <mat-tab label="User Info" class="user-info__tabs__tab">
@@ -24,9 +25,9 @@
         <app-calendar></app-calendar></div
     ></mat-tab>
     <mat-tab label="Chart">
-      <!-- <mat-card class="user-info__tab--chart">
-        <app-pie-chart></app-pie-chart>
-      </mat-card> -->
+
+        <app-pie-chart class="user-info__tabs__tab--chart" *ngIf="user"></app-pie-chart>
+
     </mat-tab>
   </mat-tab-group>
   <button
@@ -38,3 +39,4 @@
         ReCalculate
       </button>
 </mat-card>
+</div>

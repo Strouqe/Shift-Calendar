@@ -4,6 +4,7 @@ import { Shift } from '../models/shift.model';
 import { User, UserInput } from '../models/user.model';
 import { MemeService } from './meme.service';
 import { ShiftService } from './shift.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,7 @@ export class UserService { // TODO: all services are tight coupled
   constructor(
     private shiftsService: ShiftService,
     private memeService: MemeService,
+    private router: Router,
   ) {
     this.memeUrl = "";
     this.memsSubscription = this.memeService.memeChanged.subscribe(
@@ -53,6 +55,7 @@ export class UserService { // TODO: all services are tight coupled
         userInput.workingHours,
         userInput.imgUrl
       );
+      this.router.navigate(['/results']);
     };
   }
 
@@ -125,6 +128,7 @@ export class UserService { // TODO: all services are tight coupled
       )
     );
     this.userChanged.next(this.user);
+    console.log("user service user", this.user)
   }
 
   getTotalWorkHours(workingHours: number, shiftDays: number): number {

@@ -22,6 +22,12 @@ import { UserComponent } from './components/user/user.component';
 
 import { PieChartComponent } from './components/pie-chart/pie-chart.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
+import { RouterModule, Routes } from '@angular/router';
+
+const appRoutes: Routes = [
+    { path: '', component: UserComponent},
+    { path: 'results', component: UserInfoComponent}
+]
 
 @NgModule({
   declarations: [
@@ -46,6 +52,7 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
     CommonModule,
     ReactiveFormsModule,
     NgApexchartsModule,
+    RouterModule.forRoot(appRoutes),
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { ShiftService } from 'src/app/services/shift.service';
@@ -23,6 +24,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private shiftService: ShiftService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +73,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     // this.userForm.reset(); add routing
     this.userService.clearUser();
     this.userService.deleteUser();
+    this.router.navigate(['/']);
   }
 
   ngOnDestroy(): void {

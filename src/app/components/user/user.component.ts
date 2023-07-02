@@ -5,6 +5,7 @@ import { UserService } from 'src/app/services/user.service';
 import { User } from '../../models/user.model';
 import { GeoService } from '../../services/geo.service';
 import { ShiftService } from '../../services/shift.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -30,7 +31,7 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
   constructor(
     private userService: UserService,
     private geoService: GeoService,
-    private shiftService: ShiftService
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -48,14 +49,7 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
         this.imageUrl = url;
       }
     );
-    // this.userService.autoSetUser();
-    if (this.user) {
-      // this.setImageUrl(this.user.imageUrl!);
-      this.showInfo = true;
-    }
-    // if (this.user) {
-    //   this.formatValues();
-    // }
+    this.userService.autoSetUser();
   }
 
   handleRefreshImage(): void {
@@ -91,7 +85,8 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
         ? this.userForm.value.imageUrl
         : this.userService.memeUrl
     );
-    this.showInfo = true;
+    this.router.navigate(['results']);
+    // this.showInfo = true;
     // this.formatValues();
   }
 
@@ -139,7 +134,6 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
     this.memeImageSubscription.unsubscribe();
   }
 }
