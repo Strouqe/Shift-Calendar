@@ -71,8 +71,7 @@ export class ShiftService { // TODO: a lot of methods, but most of them unused
       this.setShifts(this.shifts);
       this.createShift(newStartDate, shiftDays, restDays, workingHours);
     } else if (
-      compareAsc(add(this.shifts[0].startDate, { years: 1 }), endDate) !== 1 &&
-      this.shifts.length > 0 // TODO: again don't nest if's and stuff. Write them in one line, if a line starts to be large, move it to function that'll return boolean
+      compareAsc(add(this.shifts[0].startDate, { years: 1 }), endDate) !== 1 && this.shifts.length > 0
     ) {
       return; // TODO: immediate return should be at the top of code block
     } else {

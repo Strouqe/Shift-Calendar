@@ -1,10 +1,4 @@
-<!-- TODO please press alt+shift+f -->
-<form
-  class="form"
-  [formGroup]="userForm"
-  *ngIf="!showInfo"
-  (ngSubmit)="onSubmit()"
->
+<form class="form" [formGroup]="userForm" (ngSubmit)="onSubmit()">
   <mat-card>
     <div class="form__fields">
       <div>
@@ -23,11 +17,11 @@
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Gender</mat-label>
-            <!-- TODO: swap select to mat-select component -->
-            <select matNativeControl formControlName="gender">
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
+            <mat-select formControlName="gender">
+              <mat-option *ngFor="let gender of genders" [value]="gender.value">
+                {{gender.viewValue}}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </p>
         <p>

@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 import { CommonModule } from '@angular/common';
@@ -49,6 +50,7 @@ const appRoutes: Routes = [
     MatCardModule,
     MatListModule,
     MatTabsModule,
+    MatSelectModule,
     CommonModule,
     ReactiveFormsModule,
     NgApexchartsModule,

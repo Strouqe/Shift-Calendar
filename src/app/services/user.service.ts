@@ -5,11 +5,13 @@ import { User, UserInput } from '../models/user.model';
 import { MemeService } from './meme.service';
 import { ShiftService } from './shift.service';
 import { Router } from '@angular/router';
+import { GeoService } from './geo.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserService { // TODO: all services are tight coupled
+export class UserService {
+  // TODO: all services are tight coupled
   userChanged = new Subject<User>();
   memeChanged = new Subject<string>(); // TODO: why UserService has memeChanged subject inside? It doesn't belong here
   shiftsSubscription: Subscription;
@@ -21,16 +23,17 @@ export class UserService { // TODO: all services are tight coupled
   constructor(
     private shiftsService: ShiftService,
     private memeService: MemeService,
-    private router: Router,
+    private geoService: GeoService,
+    private router: Router
   ) {
-    this.memeUrl = "";
+    this.memeUrl = '';
     this.memsSubscription = this.memeService.memeChanged.subscribe(
       (url: string) => {
         this.memeUrl = url;
         this.memeChanged.next(this.memeUrl);
       }
     );
-    if(!sessionStorage.getItem('userInput')){
+    if (!sessionStorage.getItem('userInput')) {
       this.memeService.fetchMems();
     }
     if (sessionStorage.getItem('userInput') && !this.memeUrl) {
@@ -44,6 +47,7 @@ export class UserService { // TODO: all services are tight coupled
   }
 
   autoSetUser(): void {
+    this.geoService.getCurrentLocation();
     if (sessionStorage.getItem('userInput')) {
       const userInput = this.getUserInput();
       this.createUser(
@@ -56,7 +60,7 @@ export class UserService { // TODO: all services are tight coupled
         userInput.imgUrl
       );
       this.router.navigate(['/results']);
-    };
+    }
   }
 
   saveUserInput(
@@ -71,7 +75,8 @@ export class UserService { // TODO: all services are tight coupled
     if (!imgUrl) {
       imgUrl = this.memeService.getMems();
     }
-    sessionStorage.setItem( // TODO: service for sessionStorage could be created to manipulate the storage
+    sessionStorage.setItem(
+      // TODO: service for sessionStorage could be created to manipulate the storage
       'userInput',
       JSON.stringify({
         name,
@@ -93,11 +98,6 @@ export class UserService { // TODO: all services are tight coupled
     return JSON.parse(<string>sessionStorage.getItem('userInput'));
   }
 
-  setUser(user: User): void {
-    this.user = user;
-    this.userChanged.next(this.user);
-  }
-
   getUser(): User {
     return this.user;
   }
@@ -117,25 +117,27 @@ export class UserService { // TODO: all services are tight coupled
       restDays,
       workingHours
     );
-    this.setUser(
-      new User( // TODO: you can create User.fromData static method to initialize a user inside a fat model. It will remove unnecessary code in service
-        name,
-        gender,
-        this.getTotalWorkHours(workingHours, shiftDays),
-        this.getTotalFreeTime(restDays, workingHours, shiftDays),
-        this.shiftsService.getShifts(),
-        imageUrl ? imageUrl : this.memeUrl
-      )
+    this.user = new User( // TODO: you can create User.fromData static method to initialize a user inside a fat model. It will remove unnecessary code in service
+      name,
+      gender,
+      this.getTotalWorkHours(workingHours, shiftDays),
+      this.getTotalFreeTime(restDays, workingHours, shiftDays),
+      this.shiftsService.getShifts(),
+      imageUrl ? imageUrl : this.memeUrl
     );
     this.userChanged.next(this.user);
-    console.log("user service user", this.user)
+    console.log('user service user', this.user);
   }
 
   getTotalWorkHours(workingHours: number, shiftDays: number): number {
     return workingHours * shiftDays * this.shiftsService.getShifts().length;
   }
 
-  getTotalFreeTime(restDays: number, workingHours: number, shiftDays: number): number {
+  getTotalFreeTime(
+    restDays: number,
+    workingHours: number,
+    shiftDays: number
+  ): number {
     let betweenWork =
       (24 - workingHours) * shiftDays * this.shiftsService.getShifts().length;
     let totalRestDays = restDays * (this.shiftsService.getShifts().length - 1);
@@ -143,7 +145,7 @@ export class UserService { // TODO: all services are tight coupled
   }
 
   clearUser(): void {
-    this.setUser(new User('', '', 0, 0, [], '')); // TODO: User.empty static method could be used
+    this.user =  new User('', '', 0, 0, [], ''); // TODO: User.empty static method could be used
     this.shiftsService.clearShifts();
     this.userChanged.next(this.user);
   }

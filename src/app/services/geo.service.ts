@@ -6,7 +6,7 @@ import { HolidaysService } from './holidays.service';
   providedIn: 'root',
 })
 export class GeoService {
-  userCountry: string | undefined; // TODO: you have declared setter & getter but haven't made the property private
+  private userCountry: string | undefined;
   private geolocationWorking = false;
   private geocoderWorking = false;
   constructor(private holidayService: HolidaysService) {}
@@ -33,13 +33,10 @@ export class GeoService {
         this.geocoderWorking = true;
         this.geocodeLatLng(point)
           .then((response: GeocoderResponse) => {
-            // TODO: this whole code is just unreadable, eliminate nesting. For ex: this.userCountry = value.address_components[value.address_components.length - 1].short_name;
             if (response.status === 'OK' && response.results?.length) {
               const value = response.results[0];
               this.userCountry = value.address_components[value.address_components.length - 1].short_name;
-
-                console.log(this.userCountry);
-
+              console.log(this.userCountry);
               this.holidayService.fetchAllHolidays(this.userCountry);
             } else {
               console.error(response.error_message, response.status);

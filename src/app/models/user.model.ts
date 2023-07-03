@@ -20,3 +20,8 @@ export interface UserInput {
   workingHours: number;
   imgUrl: string;
 }
+
+export interface Gender {
+  value: string;
+  viewValue: string;
+}

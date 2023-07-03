@@ -11,7 +11,6 @@ const MEME_URI: string = 'https://api.imgflip.com/get_memes';
 })
 export class MemeService {
   memeChanged = new ReplaySubject<string>();
-
   private meme: string;
 
   constructor(private http: HttpClient) {

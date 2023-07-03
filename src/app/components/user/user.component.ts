@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
-import { User } from '../../models/user.model';
+import { Gender, User } from '../../models/user.model';
 import { GeoService } from '../../services/geo.service';
 import { ShiftService } from '../../services/shift.service';
 import { Router } from '@angular/router';
@@ -12,21 +12,15 @@ import { Router } from '@angular/router';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
 })
-export class UserComponent implements OnInit, OnDestroy { // TODO: check visibility modifiers and put appropriate ones on properties and methods
-  changedUser = new Subject<User>();
-  changedMeme = new Subject<string>();
-  subscription: Subscription;
-
-  memeImageSubscription: Subscription;
-  showInfo: boolean;
-  user: User;
-  totalWorkedHours: string;
-  totalOffDays: string;
-  totalRest: string;
-  startDate: Date;
+export class UserComponent implements OnInit, OnDestroy {
+  private memeImageSubscription: Subscription;
   userForm: FormGroup;
-  imageUrl: string;
-  memeUrl: string;
+  startDate: Date;
+  genders: Gender[] = [
+    {value: 'male', viewValue: 'Male'},
+    {value: 'female', viewValue: 'Female'},
+  ]
+  private memeUrl: string;
 
   constructor(
     private userService: UserService,
@@ -35,29 +29,25 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
   ) {}
 
   ngOnInit(): void {
-    this.startDate = new Date();
-    this.showInfo = false;
+    if(this.userService.getUser()){
+      this.router.navigate(['/results']);
+    }
     this.geoService.getCurrentLocation();
+    this.startDate = new Date();
     this.initForm();
-    // this.subscription = this.userService.userChanged.subscribe((user: User) => {
-    //   this.user = user;
-    //   this.imageUrl = user.imageUrl!;
-    //   console.log("user component user ====>", this.user)
-    // });
     this.memeImageSubscription = this.userService.memeChanged.subscribe(
       (url: string) => {
-        this.imageUrl = url;
+        this.memeUrl = url;
       }
     );
-    this.userService.autoSetUser();
+  }
+
+  ngOnDestroy(): void {
+    this.memeImageSubscription.unsubscribe();
   }
 
   handleRefreshImage(): void {
     this.userService.handleRefreshImage();
-  }
-
-  setImageUrl(url: string): void {
-    this.imageUrl = url;
   }
 
   onSubmit(): void {
@@ -78,46 +68,14 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
       this.userForm.value.shiftDays,
       this.userForm.value.restDays,
       this.userForm.value.workingHours,
-      this.userForm.value.imageUrl
+      this.userForm.value.imageUrl ? this.userForm.value.imageUrl : this.memeUrl
     );
-    this.setImageUrl(
-      this.userForm.value.imageUrl
-        ? this.userForm.value.imageUrl
-        : this.userService.memeUrl
-    );
-    this.router.navigate(['results']);
-    // this.showInfo = true;
-    // this.formatValues();
+    this.router.navigate(['/results']);
   }
-
-  splitTime(totalHours: number): string {
-    let days = Math.floor(totalHours / 24);
-    let hoursLeft = totalHours % 24;
-    let hours = Math.floor(hoursLeft);
-    let minuets = Math.floor((hoursLeft - hours) * 60);
-    return `${days} days, ${hours} hours, ${minuets} minuets`;
-  }
-
-  // formatValues(): void {
-  //   if (this.user) {
-  //     this.totalWorkedHours = this.user.totalWorkHours.toString();
-  //     this.totalOffDays = (
-  //       +this.user.shifts[0].restDays * (this.user.shifts.length - 1) * 24 +
-  //       this.shiftService.sumHolidays()
-  //     ).toString();
-  //     this.totalRest = (
-  //       this.user.totalFreeHours +
-  //       this.shiftService.sumHolidays() * 24 -
-  //       (24 - this.user.shifts[0].workingHours) *
-  //         this.shiftService.sumHolidays()
-  //     ).toString();
-  //   }
-  // }
 
   onReset(): void {
     this.userForm.reset();
     this.userService.clearUser();
-    this.showInfo = false;
     this.userService.deleteUser();
   }
 
@@ -133,7 +91,5 @@ export class UserComponent implements OnInit, OnDestroy { // TODO: check visibil
     });
   }
 
-  ngOnDestroy(): void {
-    this.memeImageSubscription.unsubscribe();
-  }
+
 }
