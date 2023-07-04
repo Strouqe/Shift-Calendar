@@ -1,6 +1,6 @@
 class MemeResponse {
   constructor(
-    public box_count: number,
+    public boxCount: number,
     public captions: number,
     public height: number,
     public id: string,

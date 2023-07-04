@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 import compareAsc from 'date-fns/compareAsc';
 import { Subscription } from 'rxjs';
 
 import { formatISO } from 'date-fns';
+import { Holiday } from 'src/app/models/holiday.model';
+import { StorageService } from 'src/app/services/storage.service';
 import { Shift } from '../../models/shift.model';
 import { HolidaysService } from '../../services/holidays.service';
 import { ShiftService } from '../../services/shift.service';
-import { Holiday } from 'src/app/models/holiday.model';
-import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-calendar',
@@ -36,7 +36,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.showCalendar = false;
     this.initForm();
     this.shifts = this.shiftsService.getShifts();
-    this.holidays = this.strorageService.getHolidays();
+    // this.holidays = this.strorageService.getHolidays();
     this.holidaySubscription = this.holidayService.holidaysChanged.subscribe(
       () => {
         this.holidays = this.strorageService.getHolidays();

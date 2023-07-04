@@ -16,7 +16,7 @@ export class PieChartComponent {
     this.chartOptions = {
       series: [
         this.userService.getUser().totalWorkHours,
-        this.userService.getUser().totalFreeHours,
+        this.userService.getUser().totallfreeHours,
       ],
       chart: {
         width: 570,

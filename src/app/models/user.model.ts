@@ -5,7 +5,7 @@ export class User {
     public name: string,
     public gender: string,
     public totalWorkHours: number,
-    public totalFreeHours: number,
+    public totallfreeHours: number,
     public shifts: Shift[],
     public imageUrl: string
   ) {}

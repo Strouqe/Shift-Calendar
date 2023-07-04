@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import add from 'date-fns/add';
 import compareAsc from 'date-fns/compareAsc';
 import { Subject } from 'rxjs';
+import { Holiday } from '../models/holiday.model';
 import { Shift } from '../models/shift.model';
 import { HolidaysService } from './holidays.service';
-import { Holiday } from '../models/holiday.model';
 
 @Injectable({
   providedIn: 'root',

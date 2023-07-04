@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
-import { UserService } from 'src/app/services/user.service';
-import { Gender, User } from '../../models/user.model';
-import { GeoService } from '../../services/geo.service';
-import { ShiftService } from '../../services/shift.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { StorageService } from 'src/app/services/storage.service';
+import { UserService } from 'src/app/services/user.service';
+import { Gender } from '../../models/user.model';
+import { GeoService } from '../../services/geo.service';
 
 @Component({
   selector: 'app-user',
@@ -25,11 +25,12 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private geoService: GeoService,
+    private storageService: StorageService,
     private router: Router,
   ) {}
 
   ngOnInit(): void {
-    if(this.userService.getUser()){
+    if(this.storageService.getUserInput()){
       this.router.navigate(['/results']);
     }
     this.geoService.getCurrentLocation();

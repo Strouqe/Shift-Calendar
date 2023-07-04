@@ -6,6 +6,7 @@ import { MemeService } from './meme.service';
 import { ShiftService } from './shift.service';
 import { Router } from '@angular/router';
 import { GeoService } from './geo.service';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,7 @@ export class UserService {
     private shiftsService: ShiftService,
     private memeService: MemeService,
     private geoService: GeoService,
+    private storageService: StorageService,
     private router: Router
   ) {
     this.memeUrl = '';
@@ -75,18 +77,14 @@ export class UserService {
     if (!imgUrl) {
       imgUrl = this.memeService.getMems();
     }
-    sessionStorage.setItem(
-      // TODO: service for sessionStorage could be created to manipulate the storage
-      'userInput',
-      JSON.stringify({
-        name,
-        gender,
-        startDate,
-        shiftDays,
-        restDays,
-        workingHours,
-        imgUrl,
-      })
+    this.storageService.saveUser(
+      name,
+      gender,
+      startDate,
+      shiftDays,
+      restDays,
+      workingHours,
+      imgUrl
     );
   }
 
@@ -111,6 +109,7 @@ export class UserService {
     workingHours: number,
     imageUrl?: string
   ): void {
+    this.shiftsService.clearShifts();
     this.shiftsService.createShift(
       startDate,
       shiftDays,
@@ -145,7 +144,7 @@ export class UserService {
   }
 
   clearUser(): void {
-    this.user =  new User('', '', 0, 0, [], ''); // TODO: User.empty static method could be used
+    this.user = new User('', '', 0, 0, [], ''); // TODO: User.empty static method could be used
     this.shiftsService.clearShifts();
     this.userChanged.next(this.user);
   }

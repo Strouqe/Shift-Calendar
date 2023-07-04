@@ -18,7 +18,6 @@ export class StorageService {
     imgUrl: string
   ) {
     sessionStorage.setItem(
-      // TODO: service for sessionStorage could be created to manipulate the storage
       'userInput',
       JSON.stringify({
         name,

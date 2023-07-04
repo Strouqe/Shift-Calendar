@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { ShiftService } from 'src/app/services/shift.service';
 import { StorageService } from 'src/app/services/storage.service';
@@ -26,24 +26,23 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private shiftService: ShiftService,
     private storageService: StorageService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-
     this.userSubscription = this.userService.userChanged.subscribe(
       (user: User) => {
         this.user = user;
         this.imageUrl = user.imageUrl;
-        console.log("user-info user =====>", this.user);
+        console.log('user-info user =====>', this.user);
       }
-      );
-      if(!this.user){
-        this.userService.autoSetUser()
-        }
-        if(!this.user){
-          this.router.navigate(['/']);
-        }
+    );
+    if (!this.user) {
+      this.userService.autoSetUser();
+    }
+    if (!this.user) {
+      this.router.navigate(['/']);
+    }
     this.memeImageSubscription = this.userService.memeChanged.subscribe(
       (url: string) => {
         this.imageUrl = url;
@@ -70,7 +69,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         this.shiftService.sumHolidays()
       ).toString();
       this.totalRest = (
-        this.user.totalFreeHours +
+        this.user.totallfreeHours +
         this.shiftService.sumHolidays() * 24 -
         (24 - this.user.shifts[0].workingHours) *
           this.shiftService.sumHolidays()
@@ -79,9 +78,9 @@ export class UserInfoComponent implements OnInit, OnDestroy {
   }
 
   onReset(): void {
+    this.storageService.clearStorage();
     this.userService.clearUser();
     this.userService.deleteUser();
-    this.storageService.clearStorage();
     this.router.navigate(['/']);
   }
 
