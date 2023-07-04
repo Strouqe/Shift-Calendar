@@ -125,7 +125,6 @@ export class UserService {
       imageUrl ? imageUrl : this.memeUrl
     );
     this.userChanged.next(this.user);
-    console.log('user service user', this.user);
   }
 
   getTotalWorkHours(workingHours: number, shiftDays: number): number {

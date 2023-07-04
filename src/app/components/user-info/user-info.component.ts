@@ -34,7 +34,6 @@ export class UserInfoComponent implements OnInit, OnDestroy {
       (user: User) => {
         this.user = user;
         this.imageUrl = user.imageUrl;
-        console.log('user-info user =====>', this.user);
       }
     );
     if (!this.user) {
